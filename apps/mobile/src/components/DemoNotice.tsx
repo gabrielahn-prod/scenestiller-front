@@ -37,6 +37,13 @@ export const DemoNotice = () => {
 
   if (!config.demo) return null
 
+  if (!config.pushEndpoint) return (
+    <View style={styles.card}>
+      <Text style={styles.title}>시연 모드</Text>
+      <Text style={styles.body}>샘플 영상과 위험 기록으로 화면을 체험할 수 있습니다. 기록을 눌러 영상 재생과 확인 처리를 해 보세요.</Text>
+    </View>
+  )
+
   return (
     <View style={styles.card}>
       <Text style={styles.title}>체험용 데모입니다</Text>

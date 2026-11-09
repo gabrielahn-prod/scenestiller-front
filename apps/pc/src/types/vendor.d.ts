@@ -48,6 +48,8 @@ interface ImportMetaEnv {
   readonly BASE_URL: string
   /** '1' 이면 실서버 데모 빌드(/wanted-test/pc/). 그 외에는 비어 있다. */
   readonly VITE_LIVE_MODE?: string
+  /** '1' 이면 백엔드 없이 로그인된 시연 화면으로 바로 시작한다. */
+  readonly VITE_DEMO_MODE?: string
   readonly VITE_LIVE_API_URL?: string
   readonly VITE_LIVE_SUPABASE_URL?: string
   readonly VITE_LIVE_SUPABASE_ANON_KEY?: string

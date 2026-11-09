@@ -2,12 +2,10 @@
 /**
  * `npm run wanted` — 심사위원이 보는 `/wanted-test` 흐름을 이 컴퓨터에서 그대로 돌린다.
  *
- * 데모를 가짜 백엔드용 값으로 굽고(필요할 때만), 가짜 백엔드(:8787)와 웹(:4173)을 띄우고,
+ * 데모를 샘플 모드로 굽고(필요할 때만), 웹(:4173)을 띄우고,
  * 매장 PC 화면과 사장님 휴대폰 화면을 둘 다 연다. Ctrl+C 로 둘 다 내린다.
  *
- * 기본은 가짜 백엔드다. 브라우저는 진짜 백엔드를 직접 부르지 못한다 — CORS 가
- * `https://*.scene-stealer.site` 페이지만 받는다 (scene-stealer-back backend/app/cors.py,
- * ingest-worker/src/cors.ts). 그래서 계약과 같은 모양으로 답하는 [`stub-backend.mjs`](stub-backend.mjs) 를 쓴다.
+ * 기본은 백엔드 연결 없는 샘플 시연이다. 로그인·매장·카메라·이벤트는 브라우저 안의 가짜 API 로 처리한다.
  *
  * `--live` 는 진짜 백엔드를 본다. 앱에는 이 미리보기 서버의 경로(/live-api)를 API 주소로 주고 서버가
  * 대신 넘긴다 (vite.config.ts 의 preview.proxy) — 브라우저에게는 같은 출처라 CORS 를 타지 않는다.
@@ -15,7 +13,7 @@
  *
  * 어느 쪽이든 이 dist 는 배포하지 않는다 — Vercel 은 저장소를 새로 굽는다.
  *
- *   npm run wanted                 바뀐 게 있을 때만 굽고 띄운다 (가짜 백엔드)
+ *   npm run wanted                 바뀐 게 있을 때만 굽고 띄운다 (샘플 데이터)
  *   npm run wanted -- --live       진짜 백엔드로 (.env.local 의 LIVE_* 가 필요하다)
  *   npm run wanted -- --build      무조건 다시 굽는다
  *   npm run wanted -- --no-build   굽지 않고 있는 dist 로 띄운다
@@ -37,19 +35,7 @@ const dist = resolve(demoWeb, 'dist')
 const stampPath = resolve(dist, '.wanted-build.json')
 
 const WEB_PORT = 4173
-const API_PORT = 8787
 const WEB = `http://localhost:${WEB_PORT}`
-
-/** 가짜 백엔드가 아는 계정·매장·기기 토큰. stub-backend.mjs 위쪽에 같은 값이 박혀 있다. */
-const STUB_LIVE = {
-  LIVE_API_URL: `http://localhost:${API_PORT}`,
-  LIVE_SUPABASE_URL: `http://localhost:${API_PORT}`,
-  LIVE_SUPABASE_ANON_KEY: 'local',
-  LIVE_EMAIL: 'demo@scene.test',
-  LIVE_PASSWORD: 'pw',
-  LIVE_DEVICE_TOKEN: 'ss_dev_demo',
-  LIVE_STORE_ID: 'store-demo',
-}
 
 /** --live 에서 채워야 하는 값. LIVE_API_URL · LIVE_STORE_ID 는 기본값이 있다. */
 const LIVE_REQUIRED = ['LIVE_SUPABASE_URL', 'LIVE_SUPABASE_ANON_KEY', 'LIVE_EMAIL', 'LIVE_PASSWORD', 'LIVE_DEVICE_TOKEN']
@@ -259,7 +245,7 @@ const openInBrowser = (url) => {
 
 const main = async () => {
   const live = wants('live') ? liveConfig() : null
-  const buildEnv = live ? live.env : STUB_LIVE
+  const buildEnv = { ...(live?.env ?? {}), DEMO_LIVE_MODE: live ? '1' : '' }
   // 값 자체는 남기지 않는다 (진짜 계정이 섞인다). 같은 설정인지만 알면 된다.
   const key = createHash('sha256').update(JSON.stringify(buildEnv)).digest('hex').slice(0, 16)
   const newest = Math.max(...SOURCES.map((path) => newestMtime(resolve(repo, path))))
@@ -268,7 +254,7 @@ const main = async () => {
   console.log(
     live
       ? `진짜 백엔드를 봅니다 — ${live.apiUrl}. 브라우저는 CORS 에 막히므로 이 서버가 /live-api 로 대신 넘깁니다.`
-      : '가짜 백엔드로 돕니다. 진짜 백엔드를 보려면 --live.',
+      : '백엔드 없이 샘플 데이터로 시연합니다. 진짜 백엔드를 보려면 --live.',
   )
 
   if (reason && wants('no-build')) {
@@ -279,15 +265,6 @@ const main = async () => {
     writeFileSync(stampPath, JSON.stringify({ key, newest, builtAt: new Date().toISOString() }, null, 2))
   } else {
     console.log('구운 것이 최신입니다 — 그대로 띄웁니다. (다시 구우려면 --build)')
-  }
-
-  if (live) {
-    // 가짜 백엔드는 띄우지 않는다.
-  } else if (await responds(API_PORT)) {
-    console.log(`가짜 백엔드 :${API_PORT} 는 이미 떠 있어 그대로 씁니다.`)
-  } else {
-    startServer('[백엔드]', resolve(here, 'stub-backend.mjs'), [], { env: { PORT: String(API_PORT) } })
-    await waitFor(API_PORT, '가짜 백엔드')
   }
 
   if (await responds(WEB_PORT)) {
@@ -319,7 +296,7 @@ const main = async () => {
     await waitFor(WEB_PORT, '웹')
   }
 
-  const pc = `${WEB}/wanted-test`
+  const pc = `${WEB}/wanted-test/pc/`
   const phone = `${WEB}/wanted-test/m/`
   console.log('')
   console.log(`  매장 PC 화면    ${pc}`)
@@ -327,12 +304,14 @@ const main = async () => {
   console.log(
     live
       ? `  백엔드          ${live.apiUrl}  (진짜입니다 — 조각도 판정도 진짜 데모 매장에 남습니다)`
-      : `  가짜 백엔드     http://localhost:${API_PORT}  (첫 조각에서 위험 이벤트를 만듭니다)`,
+      : '  백엔드 연결 없음 — 브라우저 안의 샘플 데이터로 동작합니다.',
   )
   console.log('')
-  console.log('  PC 화면이 시연 영상을 카메라 삼아 30초 조각을 올립니다. 잠시 뒤 PC 에 경고가 뜨고,')
-  console.log("  휴대폰 화면에도 같은 경고가 옵니다. 휴대폰에서 '확인했어요' 를 누르면 PC 경고가 닫힙니다.")
-  if (live) console.log('  경고는 서버 AI 가 판정한 것만 뜹니다 — 분석이 실패하면 아무 경고도 뜨지 않습니다.')
+  if (live) {
+    console.log('  시연 영상을 서버로 올리고, 서버 AI 가 판정한 경고를 표시합니다.')
+  } else {
+    console.log('  CCTV · 위험 기록 · 설정을 바로 둘러보세요. 상단의 위험 알림 시연 버튼으로 경고를 띄웁니다.')
+  }
   console.log('')
 
   if (wants('no-open')) {

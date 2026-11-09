@@ -119,7 +119,7 @@ export const SessionProvider = ({ children }: { children: ReactNode }) => {
       }
 
       // 데모 페이지에서는 심사위원에게 로그인을 시키지 않는다. 볼 것은 로그인 화면이 아니다.
-      const next = stored ?? (config.demo ? DEMO_SESSION : null)
+      const next = config.demo ? DEMO_SESSION : stored
       current.current = next
       setSession(next)
       setLoading(false)

@@ -9,12 +9,13 @@
 대회 제출용 **웹 데모**를 만들고 있다. 규정상 APK·exe 를 직접 내려받게 할 수 없고
 스토어 출시도 기간 안에 불가능해서, "핵심 기능을 웹에서 체험할 수 있는 데모" 를 URL 로 낸다.
 
-제출 주소는 비공개 경로 **`/wanted-test`** 다 — 데모 계정으로 자동 로그인하고, `public/demo-video` 의
-시연 영상을 CCTV 대신 물려 **실제 서버**로 조각을 올리고, 서버 AI 판정으로만 경고·알림이 간다.
-그 주소와 사이트 루트는 CCTV 실시간 화면(`/wanted-test/pc/`)으로 바로 이동한다.
-데모 계정으로 자동 로그인해 실제 서버에서 카메라 추가·삭제, 영상 업로드, AI 분석·알림을 처리한다.
-Vercel 배포에는 기존 `LIVE_*` 환경변수를 넣어야 한다. 로컬에서는 `.env.local` 을 읽는다.
-프론트는 끝났고 백엔드는 CORS 까지 PR 에 들어갔다. 도메인 · HTTPS 와 백엔드 배포가 남았다.
+제출 주소 **`/wanted-test`** 와 사이트 루트는 CCTV 시연 화면(`/wanted-test/pc/`)으로 바로 이동한다.
+현재 기본 배포는 **백엔드 없이 동작하는 샘플 모드**다. 로그인 없이 샘플 CCTV, 위험 기록,
+영상 재생, 확인·오탐 처리와 설정 화면을 볼 수 있다. PC 상단 **위험 알림 시연** 버튼으로 경고 팝업을 띄운다.
+모바일 화면은 `/wanted-test/m/` 이다. 데이터 변경은 시연용이며 실제 AI 분석·업로드·원격 푸시는 실행하지 않는다.
+
+실서버를 다시 연결할 때만 `DEMO_LIVE_MODE=1` 과 기존 `LIVE_*` 환경변수로 빌드한다.
+로컬에서는 `npm run wanted -- --live` 를 사용한다. `.env.local` 에 `LIVE_*` 가 있어도 기본 시연은 서버에 접속하지 않는다.
 
 **이 두 문서부터 읽으면 된다.**
 
@@ -38,10 +39,6 @@ Vercel 배포에는 기존 `LIVE_*` 환경변수를 넣어야 한다. 로컬에�
 | `design/` | 디자인 원본 (`.dc.html` 인라인 스타일이 정확한 값) |
 | `handoff/` | 디자인 넘겨받을 때 받은 요구사항·프롬프트 |
 
-> ⚠️ 웹 `https://app.scene-stealer.site` 는 루트가 `/wanted-test/pc/` 로 넘어간다. `LIVE_*` 설정이 있으면 실제 서버
-> `https://api.scene-stealer.site` 를 보는 시연이다. 예전 가짜 서버 데모(`/index.html`, 데이터 전부 가짜)는
-> 링크 없이 남아 있다. API 서버는 아직 PR 버전으로 배포되지 않았다 — 자세한 건 위 목표 구조 문서에 있다.
-
 ## 시작
 
 Node 22 · npm 10. 설치는 저장소 루트에서 한 번만 한다 (`node_modules` 는 루트 하나).
@@ -61,7 +58,7 @@ npm install
 | `npm run test:unit` | 단위 테스트 (Turborepo, 결과 캐시) |
 | `npm run test:e2e` | E2E (캐시 안 함) |
 | `npm run dev` | PC 앱 개발 모드 |
-| `npm run wanted` | 심사위원이 보는 `/wanted-test` 를 이 컴퓨터에서 — 가짜 백엔드까지 띄우고 매장 PC·사장님 휴대폰 화면을 둘 다 연다. `-- --live` 면 진짜 백엔드로 (`.env.local` 필요) |
+| `npm run wanted` | 심사위원이 보는 `/wanted-test` 를 이 컴퓨터에서 — 백엔드 없이 매장 PC·사장님 휴대폰 화면을 둘 다 연다. `-- --live` 면 진짜 백엔드로 (`.env.local` 필요) |
 | `npm run ui` | PC 앱 화면만 브라우저로 (`localhost:5174`, 가짜 API) |
 | `npm run fake-camera` | 가짜 CCTV 카메라. `-- --file <영상>` 으로 가진 영상을 물린다 |
 | `npm run dist` | PC 앱 설치 파일 |

@@ -127,7 +127,7 @@ const UPLOAD_LATENCY_MS = 900
 
 export const createMockApi = (): AgentApi => {
   const listeners = new Set<(status: AgentStatus) => void>()
-  const server = createMockServer(isDemo ? { demo: demoStoreSeed } : {})
+  const server = createMockServer(isDemo ? { demo: demoStoreSeed, clipUrl: demoClipUrl() } : {})
 
   const idleStatus: AgentStatus = {
     running: false,
@@ -140,7 +140,7 @@ export const createMockApi = (): AgentApi => {
 
   const store = {
     config: configStorage.read(),
-    session: sessionStorageBox.read(),
+    session: isDemo ? DEMO_SESSION : sessionStorageBox.read(),
     status: isDemo ? demoStatus(server.agentCameraState) : idleStatus,
     timer: null as ReturnType<typeof setInterval> | null,
   }
@@ -214,6 +214,7 @@ export const createMockApi = (): AgentApi => {
     },
     previewStop: async () => undefined,
     start: async (cameras) => {
+      if (store.timer) clearInterval(store.timer)
       store.config = { ...store.config, cameras }
       const entries = cameras.map((camera) => ({
         cameraId: camera.id,

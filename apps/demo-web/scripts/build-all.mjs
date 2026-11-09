@@ -4,7 +4,7 @@
  *
  *   dist/                          가짜 서버 데모 셸 (/index.html)
  *   dist/pc/  dist/m/              가짜 서버 데모의 매장 PC 화면 · 사장님 앱 — 데모 계정이 실리지 않는다
- *   dist/wanted-test/              실서버 시연 셸 — 대회 제출용 주소
+ *   dist/wanted-test/              시연 화면 선택 — 기본은 백엔드 없는 샘플 모드
  *   dist/wanted-test/pc/           실서버 시연의 매장 PC 화면 (apps/pc 렌더러, 브라우저용)
  *   dist/wanted-test/m/            실서버 시연의 사장님 앱 (apps/mobile Expo 웹)
  *   dist/wanted-test/demo-video/   시연 영상과 30초 조각 — 레포루트/public/demo-video 원본으로 만든다
@@ -12,7 +12,7 @@
  * 모두 같은 출처에 올라가야 셸이 iframe 안의 PC 앱을 직접 만질 수 있다.
  *
  * PC·모바일 앱은 두 벌씩 굽는다. 실서버 설정(LIVE_* — 데모 계정)은 /wanted-test/ 아래 빌드에만 넣고
- * 그 빌드는 늘 실서버로 돈다. 그래서 데모 계정은 주소에 /wanted-test 가 있을 때만 붙는다 —
+ * DEMO_LIVE_MODE=1 일 때만 실서버로 돈다. 그래서 데모 계정은 주소에 /wanted-test 가 있을 때만 붙는다 —
  * /pc/ · /m/ 은 무엇을 붙여 열어도(예전의 ?live=1) 데모 계정에 닿지 않는다.
  */
 import { execFileSync } from 'node:child_process'
@@ -27,7 +27,9 @@ const here = dirname(fileURLToPath(import.meta.url))
 const demoWeb = resolve(here, '..')
 const repo = resolve(demoWeb, '../..')
 const dist = resolve(demoWeb, 'dist')
-const localLiveEnv = loadEnv('production', repo, 'LIVE_')
+// 기본 배포는 백엔드 없이 바로 열리는 시연 화면이다. 실서버는 명시적으로 켠다.
+const liveMode = process.env.DEMO_LIVE_MODE === '1'
+const localLiveEnv = liveMode ? loadEnv('production', repo, 'LIVE_') : {}
 
 /**
  * 앱이 올라갈 경로. 기본은 도메인 루트다.
@@ -79,8 +81,9 @@ console.log(`베이스 경로: ${base}`)
 console.log(`푸시 엔드포인트: ${pushEndpoint || '(없음 — 휴대폰은 로컬 알림으로 동작)'}`)
 // 값은 찍지 않는다 — 빌드 로그는 공유되는 경우가 많다.
 const missingLive = LIVE_KEYS.filter((key) => key !== 'LIVE_STORE_ID' && !live[key])
+console.log(`시연 모드: ${liveMode ? '실제 백엔드' : '샘플 데이터 (백엔드 연결 없음)'}`)
 console.log(`실서버 시연 설정: ${missingLive.length === 0 ? '있음' : `빠짐 → ${missingLive.join(', ')}`}`)
-if (process.env.VERCEL === '1' && missingLive.length > 0) {
+if (liveMode && missingLive.length > 0) {
   throw new Error(`라이브 시연 환경변수가 없습니다: ${missingLive.join(', ')}. Vercel 프로젝트 설정을 복원한 뒤 다시 배포해 주세요.`)
 }
 
@@ -88,7 +91,7 @@ rmSync(dist, { recursive: true, force: true })
 mkdirSync(dist, { recursive: true })
 
 // 0. 시연 영상을 30초 조각으로. 셸 빌드(3)가 .generated/ 를 dist 로 복사한다.
-buildDemoVideos()
+const demoVideos = buildDemoVideos()
 
 /** 실서버 설정을 비운 값. 가짜 서버 데모 빌드에 데모 계정이 섞여 들어가지 않게 명시해서 지운다. */
 const blankEnv = (prefix, keys = LIVE_KEYS) => Object.fromEntries(keys.map((key) => [`${prefix}${key}`, '']))
@@ -105,8 +108,10 @@ const buildPc = (outDir, basePath, env) =>
     '--emptyOutDir',
   ], { env: { ...process.env, ...env } })
 
-buildPc(resolve(dist, 'pc'), `${base}pc/`, { ...blankEnv('VITE_'), VITE_LIVE_MODE: '' })
-buildPc(resolve(dist, 'wanted-test/pc'), `${base}wanted-test/pc/`, { ...liveEnv('VITE_'), VITE_LIVE_MODE: '1' })
+buildPc(resolve(dist, 'pc'), `${base}pc/`, { ...blankEnv('VITE_'), VITE_LIVE_MODE: '', VITE_DEMO_MODE: '' })
+buildPc(resolve(dist, 'wanted-test/pc'), `${base}wanted-test/pc/`, liveMode
+  ? { ...liveEnv('VITE_'), VITE_LIVE_MODE: '1', VITE_DEMO_MODE: '' }
+  : { ...blankEnv('VITE_'), VITE_LIVE_MODE: '', VITE_DEMO_MODE: '1' })
 
 // 2. 모바일 앱. Expo 는 출력 경로를 인자로 받고, 베이스 경로는 app.json 의 experiments.baseUrl 이 정한다.
 // --clear: EXPO_PUBLIC_* 는 번들에 글자 그대로 박히는데, Metro 캐시(임시 폴더)는 값이 바뀐 걸 모른다.
@@ -145,18 +150,39 @@ buildMobile(mobileOut, `${base}m`.replace(/\/+$/, ''), {
   ...blankEnv('EXPO_PUBLIC_', MOBILE_LIVE_KEYS),
 })
 const liveMobileOut = resolve(dist, 'wanted-test/m')
-buildMobile(liveMobileOut, `${base}wanted-test/m`, {
+buildMobile(liveMobileOut, `${base}wanted-test/m`, liveMode ? {
   EXPO_PUBLIC_DEMO: '',
   EXPO_PUBLIC_LIVE_MODE: '1',
   EXPO_PUBLIC_PUSH_ENDPOINT: '',
   EXPO_PUBLIC_VAPID_PUBLIC_KEY: '',
   EXPO_PUBLIC_CLIP_URL: '',
   ...liveEnv('EXPO_PUBLIC_', MOBILE_LIVE_KEYS),
+} : {
+  ...blankEnv('EXPO_PUBLIC_', MOBILE_LIVE_KEYS),
+  EXPO_PUBLIC_API_URL: '',
+  EXPO_PUBLIC_SUPABASE_URL: '',
+  EXPO_PUBLIC_SUPABASE_ANON_KEY: '',
+  EXPO_PUBLIC_DEMO: '1',
+  EXPO_PUBLIC_LIVE_MODE: '',
+  EXPO_PUBLIC_PUSH_ENDPOINT: '',
+  EXPO_PUBLIC_VAPID_PUBLIC_KEY: '',
+  EXPO_PUBLIC_CLIP_URL: `${base}wanted-test/clips/sample.mp4`,
 })
 
 // PC 앱과 모바일 앱이 같은 영상을 튼다. 두 번 굽지 않게 셸 옆에 한 벌만 둔다.
 const clipsSrc = resolve(repo, 'apps/mobile/public/clips')
-if (existsSync(clipsSrc)) cpSync(clipsSrc, resolve(dist, 'clips'), { recursive: true })
+if (existsSync(clipsSrc)) {
+  cpSync(clipsSrc, resolve(dist, 'clips'), { recursive: true })
+  cpSync(clipsSrc, resolve(dist, 'wanted-test/clips'), { recursive: true })
+}
+
+// 샘플 모드도 저장소에 있는 실제 CCTV 시연 영상을 재생한다.
+const sampleVideo = demoVideos.videos.find((video) => video.name === '계산대') ?? demoVideos.videos[0]
+if (sampleVideo) {
+  const source = resolve(demoWeb, '.generated/wanted-test/demo-video', sampleVideo.file)
+  cpSync(source, resolve(dist, 'clips/sample.mp4'))
+  cpSync(source, resolve(dist, 'wanted-test/clips/sample.mp4'))
+}
 
 // 카톡·슬랙 링크 미리보기용 로고. index.html 들의 og:image 가 도메인 루트의 이 파일을 가리킨다.
 const ogImageSrc = resolve(demoWeb, 'assets/og-image.jpg')

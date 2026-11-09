@@ -40,7 +40,8 @@ const demoRequested = (): boolean => {
   return value === '1' || value === 'true'
 }
 
-export const isDemo = typeof window !== 'undefined' && !window.api && demoRequested()
+export const isDemo = typeof window !== 'undefined' && !window.api && import.meta.env.VITE_LIVE_MODE !== '1' &&
+  (import.meta.env.VITE_DEMO_MODE === '1' || demoRequested())
 
 /* --------------------------------------------------------------------- 시드 */
 

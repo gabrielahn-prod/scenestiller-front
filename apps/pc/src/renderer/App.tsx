@@ -24,6 +24,7 @@ import { RiskAlertModal } from './screens/alert/RiskAlertModal'
 import { Advanced } from './screens/settings/Advanced'
 import { Settings } from './screens/settings/Settings'
 import { isLiveDemo } from './lib/live/config'
+import { isDemo } from './lib/demo'
 import { liveDemoState, type LiveBootResult } from './lib/live/live-api'
 
 const FullScreenSpinner = () => (
@@ -69,6 +70,17 @@ const Shell = () => {
         userLabel={session.signedIn ? maskPhone(session.phone) : null}
         onSignOut={() => void signOut()}
       />
+      {isDemo && (
+        <div className="flex shrink-0 flex-wrap items-center justify-between gap-3 bg-blue-50 px-page py-2.5 text-body-sm text-brand-main">
+          <span><strong>시연 모드</strong> · 샘플 영상과 데이터로 체험하고 있습니다.</span>
+          <div className="flex items-center gap-5">
+            <button type="button" className="font-semibold text-brand-sub" onClick={() => window.__sceneStealer?.triggerRisk()}>
+              위험 알림 시연
+            </button>
+            <a className="font-semibold text-brand-sub" href="../m/" target="_blank" rel="noreferrer">모바일 화면 보기 ↗</a>
+          </div>
+        </div>
+      )}
       <ConnectionBanner />
       <main className="min-h-0 flex-1 overflow-auto">
         <Outlet />

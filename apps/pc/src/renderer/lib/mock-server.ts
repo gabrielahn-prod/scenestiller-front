@@ -299,11 +299,17 @@ const LATENCY_MS = 160
 export interface MockServerOptions {
   /** 주면 데모 부팅으로 시드한다. 평소 미리보기에서는 주지 않는다. */
   readonly demo?: DemoStoreSeed
+  /** 정적 시연 영상. 없으면 개발용 미리보기처럼 영상 없이 동작한다. */
+  readonly clipUrl?: string
 }
 
-export const createMockServer = ({ demo }: MockServerOptions = {}): MockServer => {
+export const createMockServer = ({ demo, clipUrl }: MockServerOptions = {}): MockServer => {
+  const db = initialDb(demo)
   const state = {
-    db: initialDb(demo),
+    db: {
+      ...db,
+      events: db.events.map((row) => ({ ...row, clipUrl: clipUrl ?? null })),
+    },
     streamStore: null as string | null,
     streamListeners: new Set<(message: ServerStreamMessage) => void>(),
     stateListeners: new Set<(state: StreamConnectionState) => void>(),
@@ -608,7 +614,7 @@ export const createMockServer = ({ demo }: MockServerOptions = {}): MockServer =
               name: c.name,
               locationTag: c.locationTag,
               // 미리보기 모드에는 실제 영상이 없다. 화면은 '영상 없음'으로 그린다.
-              playbackUrl: null,
+              playbackUrl: clipUrl ?? null,
               segmentStartedAt: addSeconds(target.startedAt, -18),
               offsetSec: 18,
             })),
@@ -618,7 +624,7 @@ export const createMockServer = ({ demo }: MockServerOptions = {}): MockServer =
     {
       method: 'GET',
       pattern: /^\/events\/([^/]+)\/clip$/,
-      handle: () => fail(404, '클립이 없습니다 (미리보기 모드)'),
+      handle: () => clipUrl ? ok({ url: clipUrl, expiresAt: new Date(Date.now() + 86_400_000).toISOString() }) : fail(404, '클립이 없습니다 (미리보기 모드)'),
     },
     {
       method: 'GET',
@@ -700,7 +706,7 @@ export const createMockServer = ({ demo }: MockServerOptions = {}): MockServer =
             endedAt: new Date(start + length).toISOString(),
             durationSec: length / 1000,
             status: 'done',
-            playbackUrl: null,
+            playbackUrl: clipUrl ?? null,
           }))
           .reverse()
         return ok({ segments })
@@ -740,7 +746,7 @@ export const createMockServer = ({ demo }: MockServerOptions = {}): MockServer =
       startedAt,
       durationSec: 31,
     })
-    state.db = { ...state.db, events: [row, ...state.db.events] }
+    state.db = { ...state.db, events: [{ ...row, clipUrl: clipUrl ?? null }, ...state.db.events] }
     const item = toListItem(row)
     emit({ type: 'event.created', data: item })
     return item

@@ -66,5 +66,5 @@ export const liveMissing: readonly string[] = live
 
 // 실서버 시연에서는 설정이 빠졌더라도 가짜 서버로 떨어지지 않는다 — 비밀 주소에서 가짜 데이터가
 // 진짜처럼 보이면 안 된다. 요청은 실패하고, 화면 위 안내가 무엇이 빠졌는지 알린다.
-export const usingMockApi = !live && config.apiUrl === ''
-export const usingMockAuth = !live && (config.supabaseUrl === '' || config.supabaseAnonKey === '')
+export const usingMockApi = !live && (config.demo || config.apiUrl === '')
+export const usingMockAuth = !live && (config.demo || config.supabaseUrl === '' || config.supabaseAnonKey === '')
