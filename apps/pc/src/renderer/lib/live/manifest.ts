@@ -83,7 +83,11 @@ export const parseManifest = (raw: unknown, manifestUrl: string): DemoManifest |
 }
 
 /** 배포본에서 PC 앱은 `/<base>/pc/` 에 있고 영상은 한 칸 위 `/<base>/demo-video/` 에 있다. */
-export const defaultManifestUrl = (): string => new URL('../demo-video/manifest.json', document.baseURI).href
+export const manifestUrlForApp = (base: string, origin: string): string =>
+  new URL('../demo-video/manifest.json', new URL(base, origin)).href
+
+export const defaultManifestUrl = (): string =>
+  manifestUrlForApp(import.meta.env.BASE_URL, window.location.origin)
 
 export const loadManifest = async (
   fetchImpl: typeof fetch = fetch,

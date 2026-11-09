@@ -7,7 +7,7 @@
  *
  * 2d 위험 팝업은 라우트가 아니다. 어느 화면 위에서든 뜬다.
  */
-import type { ReactNode } from 'react'
+import { useEffect, useState, type ReactNode } from 'react'
 import { Navigate, Outlet, Route, Routes, useLocation } from 'react-router-dom'
 import { SessionProvider, useSession } from './app/session'
 import { StreamProvider, useStream } from './app/stream'
@@ -23,6 +23,8 @@ import { Onboarding } from './screens/onboarding/Onboarding'
 import { RiskAlertModal } from './screens/alert/RiskAlertModal'
 import { Advanced } from './screens/settings/Advanced'
 import { Settings } from './screens/settings/Settings'
+import { isLiveDemo, isVideoPreview } from './lib/live/config'
+import { liveDemoState, type LiveBootResult } from './lib/live/live-api'
 
 const FullScreenSpinner = () => (
   <div className="flex h-full items-center justify-center bg-page text-gray-600">
@@ -38,6 +40,11 @@ const maskPhone = (phone: string): string => {
 
 const ConnectionBanner = () => {
   const { connection } = useStream()
+  if (isVideoPreview) return (
+    <div role="status" className="shrink-0 bg-blue-50 px-page py-2.5 text-body-sm text-gray-600">
+      시연 영상 미리보기 · 서버 연결 전에는 AI 분석과 위험 알림이 제공되지 않습니다.
+    </div>
+  )
   if (connection !== 'reconnecting' && connection !== 'unauthorized') return null
   return (
     <div
@@ -87,26 +94,48 @@ const RequireStore = ({ children }: { children: ReactNode }) => {
   return <StreamProvider>{children}</StreamProvider>
 }
 
+const DemoEntry = ({ children }: { children: ReactNode }) => {
+  const [result, setResult] = useState<LiveBootResult | null>(null)
+  useEffect(() => {
+    if (!isLiveDemo) return
+    let active = true
+    void liveDemoState.ready().then((next) => { if (active) setResult(next) })
+    return () => { active = false }
+  }, [])
+  if (!isLiveDemo) return <>{children}</>
+  if (!result) return <FullScreenSpinner />
+  if (!result.ok) return (
+    <div className="flex h-full flex-col items-center justify-center gap-4 bg-page px-page text-center">
+      <h1 className="text-h1">CCTV 화면을 열지 못했습니다</h1>
+      <p role="alert" className="text-body text-gray-600">{result.message}</p>
+      <button className="text-brand-sub" onClick={() => window.location.reload()}>다시 시도</button>
+    </div>
+  )
+  return <>{children}</>
+}
+
 export const App = () => (
-  <SessionProvider fallback={<FullScreenSpinner />}>
-    <Routes>
-      <Route path="/onboarding" element={<Onboarding />} />
-      <Route path="/settings/advanced" element={<Advanced />} />
-      <Route path="/dev/components" element={<ComponentGallery />} />
-      <Route
-        element={
-          <RequireStore>
-            <Shell />
-          </RequireStore>
-        }
-      >
-        <Route path="/live" element={<Live />} />
-        <Route path="/events" element={<EventList />} />
-        <Route path="/events/:eventId" element={<EventDetailScreen />} />
-        <Route path="/cameras/add" element={<AddCamera />} />
-        <Route path="/settings" element={<Settings />} />
-      </Route>
-      <Route path="*" element={<Navigate to="/live" replace />} />
-    </Routes>
-  </SessionProvider>
+  <DemoEntry>
+    <SessionProvider fallback={<FullScreenSpinner />}>
+      <Routes>
+        <Route path="/onboarding" element={isLiveDemo ? <Navigate to="/live" replace /> : <Onboarding />} />
+        <Route path="/settings/advanced" element={<Advanced />} />
+        <Route path="/dev/components" element={<ComponentGallery />} />
+        <Route
+          element={
+            <RequireStore>
+              <Shell />
+            </RequireStore>
+          }
+        >
+          <Route path="/live" element={<Live />} />
+          <Route path="/events" element={<EventList />} />
+          <Route path="/events/:eventId" element={<EventDetailScreen />} />
+          <Route path="/cameras/add" element={<AddCamera />} />
+          <Route path="/settings" element={<Settings />} />
+        </Route>
+        <Route path="*" element={<Navigate to="/live" replace />} />
+      </Routes>
+    </SessionProvider>
+  </DemoEntry>
 )

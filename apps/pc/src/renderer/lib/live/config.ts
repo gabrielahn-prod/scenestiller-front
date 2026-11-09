@@ -56,3 +56,5 @@ export const missingLiveConfig = (config: LiveConfig = liveConfig): string[] =>
  * `/pc/` 빌드에는 데모 계정 값도 싣지 않는다.
  */
 export const isLiveDemo = typeof window !== 'undefined' && !window.api && import.meta.env.VITE_LIVE_MODE === '1'
+
+export const isVideoPreview = isLiveDemo && missingLiveConfig().length > 0

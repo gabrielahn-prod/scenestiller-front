@@ -45,6 +45,7 @@ declare const __SCENE_STEALER_BUILD_DEFAULTS__:
  * Electron 빌드와 `npm run ui` 에서는 비어 있다.
  */
 interface ImportMetaEnv {
+  readonly BASE_URL: string
   /** '1' 이면 실서버 데모 빌드(/wanted-test/pc/). 그 외에는 비어 있다. */
   readonly VITE_LIVE_MODE?: string
   readonly VITE_LIVE_API_URL?: string

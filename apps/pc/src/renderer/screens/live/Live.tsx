@@ -21,6 +21,7 @@ import { formatBytes } from '../../lib/format'
 import { EVENT_TITLE, RISK_LABEL, SPEED_OPTIONS, STATE_LABEL } from '../../lib/labels'
 import { deleteCamera, getMonitoring, listEvents } from '../../lib/server-api'
 import { formatAgo, formatClock, formatDuration, localDateKey, localDayRange } from '../../lib/time'
+import { isVideoPreview } from '../../lib/live/config'
 
 const MAX_CAMERAS = 8
 
@@ -436,7 +437,9 @@ const TodayFeed = ({ storeId }: { storeId: string }) => {
         {events.error && <p className="px-2 py-6 text-center text-caption text-error-main">{events.error}</p>}
         {events.data && visible.length === 0 && (
           <p className="px-2 py-10 text-center text-caption text-gray-600">
-            {filter === 'all' ? '오늘은 아직 위험 신호가 없습니다.' : '조건에 맞는 위험 신호가 없습니다.'}
+            {isVideoPreview
+              ? '서버 연결 후 분석된 위험 신호가 표시됩니다.'
+              : filter === 'all' ? '오늘은 아직 위험 신호가 없습니다.' : '조건에 맞는 위험 신호가 없습니다.'}
           </p>
         )}
         {visible.map((event) => (
@@ -547,14 +550,14 @@ export const Live = () => {
             <h1 className="shrink-0 whitespace-nowrap text-h1">실시간</h1>
             {/* 2c 는 5대 중 4대만 붙어 있어도 초록이다 — 한 대라도 보고 있으면 감시 중이다. */}
             <Indicator tone={status.running && streamingCount > 0 ? 'good' : 'bad'}>
-              {status.running ? `감시 중 ${streamingCount}/${tiles.length}대` : '감시 중지됨'}
+              {status.running ? `${isVideoPreview ? '재생 중' : '감시 중'} ${streamingCount}/${tiles.length}대` : '감시 중지됨'}
             </Indicator>
-            <Indicator tone={upload.tone}>{upload.label}</Indicator>
+            <Indicator tone={isVideoPreview ? 'warn' : upload.tone}>{isVideoPreview ? '서버 연결 전' : upload.label}</Indicator>
             <span className="truncate text-body-sm font-normal text-gray-600">
               {monitoring.data?.lastAnalyzedAt
                 ? `마지막 AI 분석 ${formatClock(monitoring.data.lastAnalyzedAt)} · `
                 : ''}
-              알림 지연 최대 {speed}
+              {isVideoPreview ? '시연 영상' : `알림 지연 최대 ${speed}`}
             </span>
           </div>
           <div className="flex shrink-0 gap-2.5">

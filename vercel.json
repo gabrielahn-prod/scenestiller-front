@@ -4,7 +4,8 @@
   "outputDirectory": "apps/demo-web/dist",
   "framework": null,
   "redirects": [
-    { "source": "/", "destination": "/wanted-test", "permanent": false }
+    { "source": "/", "destination": "/wanted-test/pc/", "permanent": false },
+    { "source": "/wanted-test", "destination": "/wanted-test/pc/", "permanent": false }
   ],
   "rewrites": [
     { "source": "/wanted-test", "destination": "/wanted-test/index.html" },
