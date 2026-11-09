@@ -9,7 +9,6 @@ import { DEFAULT_CONFIG, type AgentConfig, type AgentStatus } from '../../../sha
 import { createCollector, type Collector } from './collector'
 import { liveConfig, missingLiveConfig, type LiveConfig } from './config'
 import { loadManifest, type DemoManifest, type DemoVideo } from './manifest'
-import { createVideoPreviewApi } from './video-preview-api'
 
 /**
  * 실서버 데모의 AgentApi — Electron 의 preload 가 주는 것과 같은 모양이다.
@@ -93,15 +92,12 @@ const idleStatus: AgentStatus = {
 }
 
 export const createLiveApi = (config: LiveConfig = liveConfig): AgentApi => {
-  if (missingLiveConfig(config).length > 0) {
-    const preview = createVideoPreviewApi()
-    latestManifest = preview.manifest
-    latestReady = preview.ready
-    window.__sceneStealerLive = { configMissing: missingLiveConfig(config), ready: preview.ready }
-    return preview.api
-  }
   // 브라우저의 fetch 는 window 에 묶여 있어야 한다. 그냥 넘기면 'Illegal invocation'.
-  const browserFetch: typeof fetch = (input, init) => globalThis.fetch(input, init)
+  const browserFetch: typeof fetch = (input, init) => globalThis.fetch(input, {
+    ...init,
+    // SSE 는 자신의 연결 감시를 쓴다. 나머지는 서버 장애 때 무한 로딩하지 않게 끝낸다.
+    signal: init?.signal ?? AbortSignal.timeout(20_000),
+  })
 
   const session = createServerSession({
     getConfig: () => ({ supabaseUrl: config.supabaseUrl, supabaseAnonKey: config.supabaseAnonKey }),
@@ -329,6 +325,7 @@ export const createLiveApi = (config: LiveConfig = liveConfig): AgentApi => {
     setConfig: async (patch) => {
       await ready
       state.config = { ...state.config, ...patch }
+      if (patch.cameras) state.collector?.setActive(patch.cameras.map((camera) => camera.id))
       return state.config
     },
     getStatus: async () => {

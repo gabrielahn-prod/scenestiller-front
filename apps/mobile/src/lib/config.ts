@@ -18,7 +18,11 @@ const live = trim(process.env.EXPO_PUBLIC_LIVE_MODE) === '1'
 export const config = {
   /** 실서버 시연 중인지. 이때는 아래 주소들이 LIVE_* 값이다. */
   live,
-  apiUrl: live ? trim(process.env.EXPO_PUBLIC_LIVE_API_URL) : trim(process.env.EXPO_PUBLIC_API_URL),
+  apiUrl: live
+    ? (trim(process.env.EXPO_PUBLIC_LIVE_API_URL)
+      ? new URL(trim(process.env.EXPO_PUBLIC_LIVE_API_URL), globalThis.location?.origin ?? 'http://localhost').href.replace(/\/+$/, '')
+      : '')
+    : trim(process.env.EXPO_PUBLIC_API_URL),
   supabaseUrl: live ? trim(process.env.EXPO_PUBLIC_LIVE_SUPABASE_URL) : trim(process.env.EXPO_PUBLIC_SUPABASE_URL),
   supabaseAnonKey: live
     ? trim(process.env.EXPO_PUBLIC_LIVE_SUPABASE_ANON_KEY)

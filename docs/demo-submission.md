@@ -6,12 +6,12 @@
 
 - `/` 와 `/wanted-test` 는 `/wanted-test/pc/` 의 CCTV 실시간 화면으로 바로 이동한다.
 - `LIVE_*` 설정이 모두 있으면 기존 데모 계정으로 자동 로그인하고 실제 백엔드를 사용한다.
-- 새 프로젝트에 설정이 없으면 로그인 없이 `public/demo-video` 의 영상을 카메라별로 재생한다.
-  이때 서버 연결 전임을 표시하고, 분석 결과·위험 이벤트·업로드 실적은 만들지 않는다.
+- `public/demo-video` 의 영상이 실제 카메라 입력을 대신하고, 추가·삭제는 실제 서버에 저장한다.
+- 새 프로젝트에 `LIVE_*` 설정이 없으면 Vercel 빌드를 중단한다. 기능이 막힌 미리보기로 대체하지 않는다.
 - 격자에서 카메라를 누르거나 **하나 크게**를 선택하면 메인 영상과 작은 카메라 목록을 볼 수 있다.
 - 실서버 시작 실패는 원인을 표시하며, 입력할 수 없는 일반 로그인 화면으로 보내지 않는다.
 
-아래의 기존 배포 절차는 실제 서버 분석·알림을 연결할 때 적용한다.
+아래 배포 절차의 환경변수를 복원해야 실제 사용자 흐름으로 시연할 수 있다.
 
 ## 규정이 정한 것
 
@@ -61,7 +61,7 @@ Vercel 에서 이 저장소를 Import 한다. **Root Directory 를 비워 두는
 | Root Directory | (비움) |
 | Framework Preset | Other |
 | Build Command · Output Directory | 저장소 루트 `vercel.json` 이 지정한다 — 손대지 않아도 된다 |
-| 환경변수 | 없어도 된다 |
+| 환경변수 | 아래 `LIVE_*` 설정 필수 |
 
 `main` 에 올라갈 때마다 자동으로 다시 굽는다.
 
@@ -95,8 +95,8 @@ Vercel 프로젝트 **Settings → Environment Variables** 에 두 개를 넣는
 | 백엔드 | `https://api.scene-stealer.site` | PR 버전 배포됨 (2026-09-18). 업로드까지 된다. **AI 워커 수정 배포 필요** — 지금은 모든 영상이 5% 에서 실패 ([`demo-target-architecture.md`](demo-target-architecture.md) '남은 일' 8) |
 | 제출 링크 | `https://app.scene-stealer.site/wanted-test` | |
 
-프론트의 API 주소(`LIVE_API_URL`)와 백엔드의 CORS 도메인(`CORS_ALLOWED_DOMAIN`)은 이 값이 기본이라 따로
-넣지 않아도 된다. `*.vercel.app` 주소로 연 `/wanted-test` 는 CORS 에 막힌다.
+프론트는 같은 출처의 `/live-api` 를 통해 `https://api.scene-stealer.site` 를 호출한다
+(`vercel.json` 외부 rewrite). Vercel 기본 주소와 사용자 도메인 모두 같은 백엔드를 사용한다.
 
 **③ 데모 데이터.** 새 Supabase 프로젝트에 스키마를 적용한 뒤
 
@@ -115,12 +115,12 @@ Vercel 프로젝트 **Settings → Environment Variables** 에 두 개를 넣는
 | `LIVE_EMAIL` · `LIVE_PASSWORD` | ③-1 의 데모 계정 |
 | `LIVE_DEVICE_TOKEN` | ③-3 의 기기 토큰 |
 | `LIVE_STORE_ID` | (선택) 매장이 여럿이면 쓸 매장 id. 비우면 첫 매장 |
-| `LIVE_API_URL` | (선택) 기본값 `https://api.scene-stealer.site`. 다른 서버를 볼 때만 |
+| `LIVE_API_URL` | (선택) 기본값 `/live-api` (Vercel 에서 `https://api.scene-stealer.site` 로 전달). 다른 서버를 볼 때만 |
 
 > ⚠️ 이 값들은 **번들에 박혀 공개된다.** 주소를 아는 사람은 누구나 데모 계정으로 들어온다.
 > 데모 전용 계정·매장만 쓰고, 다른 데이터가 있는 계정은 절대 넣지 않는다.
 
-빠진 값이 있으면 로그인 없이 CCTV 영상 미리보기를 연다. 실제 분석·알림을 쓰려면 위 값을 채우고 다시 배포한다.
+빠진 값이 있으면 Vercel 빌드를 중단한다. 기존 프로젝트의 값을 복원하고 다시 배포한다.
 
 ### 4. `/` 데모의 테스트셋 영상 갈아끼우기 (선택)
 

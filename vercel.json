@@ -8,6 +8,7 @@
     { "source": "/wanted-test", "destination": "/wanted-test/pc/", "permanent": false }
   ],
   "rewrites": [
+    { "source": "/live-api/:path*", "destination": "https://api.scene-stealer.site/:path*" },
     { "source": "/wanted-test", "destination": "/wanted-test/index.html" },
     { "source": "/wanted-test/pc", "destination": "/wanted-test/pc/index.html" },
     { "source": "/wanted-test/m", "destination": "/wanted-test/m/index.html" },

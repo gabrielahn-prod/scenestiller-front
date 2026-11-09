@@ -23,7 +23,7 @@ import { Onboarding } from './screens/onboarding/Onboarding'
 import { RiskAlertModal } from './screens/alert/RiskAlertModal'
 import { Advanced } from './screens/settings/Advanced'
 import { Settings } from './screens/settings/Settings'
-import { isLiveDemo, isVideoPreview } from './lib/live/config'
+import { isLiveDemo } from './lib/live/config'
 import { liveDemoState, type LiveBootResult } from './lib/live/live-api'
 
 const FullScreenSpinner = () => (
@@ -40,11 +40,6 @@ const maskPhone = (phone: string): string => {
 
 const ConnectionBanner = () => {
   const { connection } = useStream()
-  if (isVideoPreview) return (
-    <div role="status" className="shrink-0 bg-blue-50 px-page py-2.5 text-body-sm text-gray-600">
-      시연 영상 미리보기 · 서버 연결 전에는 AI 분석과 위험 알림이 제공되지 않습니다.
-    </div>
-  )
   if (connection !== 'reconnecting' && connection !== 'unauthorized') return null
   return (
     <div

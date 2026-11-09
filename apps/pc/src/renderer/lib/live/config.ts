@@ -28,7 +28,9 @@ export interface LiveConfig {
 
 // import.meta.env.VITE_* 를 하나씩 그대로 적는다 — Vite 는 이 모양만 빌드 때 값으로 바꿔 넣는다.
 export const liveConfig: LiveConfig = {
-  apiUrl: read(import.meta.env.VITE_LIVE_API_URL).replace(/\/+$/, ''),
+  apiUrl: read(import.meta.env.VITE_LIVE_API_URL)
+    ? new URL(read(import.meta.env.VITE_LIVE_API_URL), globalThis.location?.origin ?? 'http://localhost').href.replace(/\/+$/, '')
+    : '',
   supabaseUrl: read(import.meta.env.VITE_LIVE_SUPABASE_URL).replace(/\/+$/, ''),
   supabaseAnonKey: read(import.meta.env.VITE_LIVE_SUPABASE_ANON_KEY),
   email: read(import.meta.env.VITE_LIVE_EMAIL),
@@ -56,5 +58,3 @@ export const missingLiveConfig = (config: LiveConfig = liveConfig): string[] =>
  * `/pc/` 빌드에는 데모 계정 값도 싣지 않는다.
  */
 export const isLiveDemo = typeof window !== 'undefined' && !window.api && import.meta.env.VITE_LIVE_MODE === '1'
-
-export const isVideoPreview = isLiveDemo && missingLiveConfig().length > 0

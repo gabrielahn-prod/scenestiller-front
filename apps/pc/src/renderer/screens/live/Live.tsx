@@ -12,7 +12,7 @@ import type { EventListItem, MonitoringCamera } from '../../../shared/server-typ
 import type { CameraRuntimeStatus, SelectedCamera, UploadStatus } from '../../../shared/types'
 import { useSession, useConnectedStore } from '../../app/session'
 import { useStream, useStreamMessages } from '../../app/stream'
-import { Button, Segmented, Spinner, StatusDot, Tag, VideoSurface } from '../../components/ui'
+import { Button, Notice, Segmented, Spinner, StatusDot, Tag, VideoSurface } from '../../components/ui'
 import { usePreview } from '../../hooks/usePreview'
 import { useResource } from '../../hooks/useResource'
 import { api } from '../../lib/api'
@@ -21,7 +21,6 @@ import { formatBytes } from '../../lib/format'
 import { EVENT_TITLE, RISK_LABEL, SPEED_OPTIONS, STATE_LABEL } from '../../lib/labels'
 import { deleteCamera, getMonitoring, listEvents } from '../../lib/server-api'
 import { formatAgo, formatClock, formatDuration, localDateKey, localDayRange } from '../../lib/time'
-import { isVideoPreview } from '../../lib/live/config'
 
 const MAX_CAMERAS = 8
 
@@ -149,6 +148,7 @@ const CameraCard = ({
   now,
   onSelect,
   onDelete,
+  deleting = false,
   compact = false,
   className,
 }: {
@@ -158,6 +158,7 @@ const CameraCard = ({
   onSelect?: () => void
   /** 있으면 타일 모서리에 삭제 버튼을 둔다 — 서버에 등록된 카메라(tile.server)만 지울 수 있다. */
   onDelete?: () => void
+  deleting?: boolean
   /** '하나 크게' 아래 줄의 작은 카드 — 상태 글은 빼고 점만 둔다. 글까지 두면 이름이 한 글자로 잘린다. */
   compact?: boolean
   className?: string
@@ -246,6 +247,7 @@ const CameraCard = ({
           >
             <button
               type="button"
+              disabled={deleting}
               onClick={() => setConfirming(false)}
               className="rounded-[4px] px-2 py-1 text-[11px] font-semibold text-white hover:bg-white/20"
             >
@@ -253,10 +255,11 @@ const CameraCard = ({
             </button>
             <button
               type="button"
+              disabled={deleting}
               onClick={onDelete}
               className="rounded-[4px] bg-error-500 px-2 py-1 text-[11px] font-semibold text-white hover:bg-error-600"
             >
-              삭제
+              {deleting ? '삭제 중…' : '삭제'}
             </button>
           </div>
         ) : (
@@ -437,9 +440,7 @@ const TodayFeed = ({ storeId }: { storeId: string }) => {
         {events.error && <p className="px-2 py-6 text-center text-caption text-error-main">{events.error}</p>}
         {events.data && visible.length === 0 && (
           <p className="px-2 py-10 text-center text-caption text-gray-600">
-            {isVideoPreview
-              ? '서버 연결 후 분석된 위험 신호가 표시됩니다.'
-              : filter === 'all' ? '오늘은 아직 위험 신호가 없습니다.' : '조건에 맞는 위험 신호가 없습니다.'}
+            {filter === 'all' ? '오늘은 아직 위험 신호가 없습니다.' : '조건에 맞는 위험 신호가 없습니다.'}
           </p>
         )}
         {visible.map((event) => (
@@ -462,12 +463,13 @@ const TodayFeed = ({ storeId }: { storeId: string }) => {
 export const Live = () => {
   const navigate = useNavigate()
   const store = useConnectedStore()
-  const { config, status, updateConfig } = useSession()
+  const { config, status, updateConfig, refreshStore } = useSession()
   const { resyncToken } = useStream()
   const [layout, setLayout] = useState<'grid' | 'single'>('grid')
   const [focusKey, setFocusKey] = useState<string | null>(null)
   const [pausing, setPausing] = useState(false)
   const [removingKey, setRemovingKey] = useState<string | null>(null)
+  const [actionError, setActionError] = useState<string | null>(null)
   const [now, setNow] = useState(Date.now())
 
   const monitoring = useResource(() => getMonitoring(store.id), [store.id, resyncToken])
@@ -475,6 +477,7 @@ export const Live = () => {
   // 카메라 관리(설정)와 같은 절차 — 서버에서 지우고, 이 PC 의 감시 목록에서도 뺀 뒤 다시 건다.
   const removeCamera = async (tile: TileModel) => {
     if (!tile.server || removingKey) return
+    setActionError(null)
     setRemovingKey(tile.key)
     try {
       await deleteCamera(tile.server.id)
@@ -484,6 +487,9 @@ export const Live = () => {
       await updateConfig({ cameras: next })
       if (focusKey === tile.key) setFocusKey(null)
       await monitoring.reload()
+      await refreshStore()
+    } catch (error) {
+      setActionError(error instanceof Error ? error.message : '카메라를 삭제하지 못했습니다. 다시 시도해 주세요.')
     } finally {
       setRemovingKey(null)
     }
@@ -533,10 +539,13 @@ export const Live = () => {
   const focused = tiles.find((tile) => tile.key === focusKey) ?? tiles[0] ?? null
 
   const togglePause = async () => {
+    setActionError(null)
     setPausing(true)
     try {
       if (status.running) await api.stop()
       else await api.start(config.cameras)
+    } catch (error) {
+      setActionError(error instanceof Error ? error.message : '감시 상태를 바꾸지 못했습니다. 다시 시도해 주세요.')
     } finally {
       setPausing(false)
     }
@@ -550,14 +559,14 @@ export const Live = () => {
             <h1 className="shrink-0 whitespace-nowrap text-h1">실시간</h1>
             {/* 2c 는 5대 중 4대만 붙어 있어도 초록이다 — 한 대라도 보고 있으면 감시 중이다. */}
             <Indicator tone={status.running && streamingCount > 0 ? 'good' : 'bad'}>
-              {status.running ? `${isVideoPreview ? '재생 중' : '감시 중'} ${streamingCount}/${tiles.length}대` : '감시 중지됨'}
+              {status.running ? `감시 중 ${streamingCount}/${tiles.length}대` : '감시 중지됨'}
             </Indicator>
-            <Indicator tone={isVideoPreview ? 'warn' : upload.tone}>{isVideoPreview ? '서버 연결 전' : upload.label}</Indicator>
+            <Indicator tone={upload.tone}>{upload.label}</Indicator>
             <span className="truncate text-body-sm font-normal text-gray-600">
               {monitoring.data?.lastAnalyzedAt
                 ? `마지막 AI 분석 ${formatClock(monitoring.data.lastAnalyzedAt)} · `
                 : ''}
-              {isVideoPreview ? '시연 영상' : `알림 지연 최대 ${speed}`}
+              알림 지연 최대 {speed}
             </span>
           </div>
           <div className="flex shrink-0 gap-2.5">
@@ -575,6 +584,7 @@ export const Live = () => {
           </div>
         </div>
 
+        {actionError && <Notice tone="bad">{actionError}</Notice>}
         {tiles.length === 0 ? (
           <div className={cn('grid min-h-0 flex-1 grid-cols-3 gap-3', gridRowsFor(1))}>
             <AddCameraSlot remaining={MAX_CAMERAS} onClick={() => navigate('/cameras/add')} />
@@ -597,6 +607,7 @@ export const Live = () => {
                   setLayout('single')
                 }}
                 onDelete={tile.server ? () => void removeCamera(tile) : undefined}
+                deleting={removingKey === tile.key}
               />
             ))}
             {tiles.length < MAX_CAMERAS && (

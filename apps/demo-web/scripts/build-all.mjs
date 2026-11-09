@@ -20,12 +20,14 @@ import { cpSync, mkdirSync, rmSync, writeFileSync, existsSync, readFileSync } fr
 import { createRequire } from 'node:module'
 import { dirname, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
+import { loadEnv } from 'vite'
 import { buildDemoVideos } from './demo-video.mjs'
 
 const here = dirname(fileURLToPath(import.meta.url))
 const demoWeb = resolve(here, '..')
 const repo = resolve(demoWeb, '../..')
 const dist = resolve(demoWeb, 'dist')
+const localLiveEnv = loadEnv('production', repo, 'LIVE_')
 
 /**
  * 앱이 올라갈 경로. 기본은 도메인 루트다.
@@ -37,7 +39,7 @@ const vapidKey = process.env.DEMO_VAPID_PUBLIC_KEY ?? ''
 
 /**
  * 실서버 시연(/wanted-test) 설정. Vercel 프로젝트 환경변수로 넣는다 (docs/demo-submission.md).
- * 없어도 빌드는 된다 — /wanted-test 가 무엇이 빠졌는지 화면에 알린다. `/` 데모는 영향이 없다.
+ * Vercel 배포에는 필수다. 누락되면 빌드를 중단해 작동하지 않는 데모가 배포되지 않게 한다.
  * 전부 번들에 박혀 공개되는 값이다. 데모 전용 계정·매장·기기 토큰만 넣는다.
  */
 const LIVE_KEYS = [
@@ -50,12 +52,12 @@ const LIVE_KEYS = [
   'LIVE_STORE_ID',
 ]
 /**
- * 서비스 도메인은 고정이라 기본값으로 박아 둔다 — 웹은 app.scene-stealer.site, API 는 api.scene-stealer.site.
- * 백엔드 CORS 도 같은 최상위 도메인만 받는다. 다른 서버를 볼 때만 LIVE_API_URL 로 바꾼다.
+ * 같은 출처의 프록시를 사용한다(vercel.json). Vercel 기본 주소와 사용자 도메인에서
+ * 로그인·API·조각 업로드가 같은 방식으로 동작한다. 다른 서버를 볼 때 LIVE_API_URL 로 바꾼다.
  */
-const LIVE_DEFAULTS = { LIVE_API_URL: 'https://api.scene-stealer.site' }
+const LIVE_DEFAULTS = { LIVE_API_URL: '/live-api' }
 const live = Object.fromEntries(
-  LIVE_KEYS.map((key) => [key, (process.env[key] ?? '').trim() || (LIVE_DEFAULTS[key] ?? '')]),
+  LIVE_KEYS.map((key) => [key, (process.env[key] ?? localLiveEnv[key] ?? '').trim() || (LIVE_DEFAULTS[key] ?? '')]),
 )
 /** 앱마다 번들러가 받아 주는 접두사가 다르다 (Vite: VITE_, Expo: EXPO_PUBLIC_). */
 const liveEnv = (prefix, keys = LIVE_KEYS) => Object.fromEntries(keys.map((key) => [`${prefix}${key}`, live[key]]))
@@ -78,6 +80,9 @@ console.log(`푸시 엔드포인트: ${pushEndpoint || '(없음 — 휴대폰은
 // 값은 찍지 않는다 — 빌드 로그는 공유되는 경우가 많다.
 const missingLive = LIVE_KEYS.filter((key) => key !== 'LIVE_STORE_ID' && !live[key])
 console.log(`실서버 시연 설정: ${missingLive.length === 0 ? '있음' : `빠짐 → ${missingLive.join(', ')}`}`)
+if (process.env.VERCEL === '1' && missingLive.length > 0) {
+  throw new Error(`라이브 시연 환경변수가 없습니다: ${missingLive.join(', ')}. Vercel 프로젝트 설정을 복원한 뒤 다시 배포해 주세요.`)
+}
 
 rmSync(dist, { recursive: true, force: true })
 mkdirSync(dist, { recursive: true })
