@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet><meta name="design_doc_mode" content="canvas"><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css"><link href="https://fonts.googleapis.com/css2?family=Prompt:wght@700&display=swap" rel="stylesheet"><style>body{margin:0;background:#EEEFF1;font-family:Pretendard,-apple-system,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;color:#1A1C20;letter-spacing:-0.01em}a{color:#3B6FF5}a:hover{color:#0057D1}</style></helmet>
+
+<div style="padding:48px 56px;display:flex;flex-direction:column;gap:48px;max-width:1400px">
+
+<div style="display:flex;flex-direction:column;gap:10px">
+  <div style="display:flex;align-items:center;gap:12px"><img src="ds/assets/logo-mark-navy.svg" style="width:34px;height:31px" alt=""><span style="font-family:Prompt,sans-serif;font-weight:700;font-size:26px;color:#14233D">Scene Stealer</span></div>
+  <div style="font-size:32px;font-weight:600;line-height:1.3">디자인 시스템 — 웹/PC 앱용</div>
+  <div style="font-size:15px;color:#868B94;max-width:760px;line-height:1.55">피그마 '씬스틸러 디자인시스템'의 변수(94개)와 '씬스틸러 ui' 웹 화면(홈·내 영상·분석 완료)에서 추출. 웹 화면은 1440 기준 큰 타이포(24px 내비)로 그려져 있어, 모니터링 대시보드 밀도에 맞게 <b style="color:#1A1C20">타입 스케일만 한 단계 낮췄고</b> 색·반경·그림자·컴포넌트 형태는 원본 값을 그대로 씁니다.</div>
+</div>
+
+<!-- 색 -->
+<div style="display:flex;flex-direction:column;gap:18px">
+  <div style="font-size:20px;font-weight:600">1. 색 — Primitive → Semantic</div>
+  <div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px">
+    <div style="background:#FEFEFE;border-radius:12px;padding:18px;box-shadow:2px 4px 20px rgba(0,0,0,.04);display:flex;flex-direction:column;gap:10px">
+      <div style="font-size:14px;font-weight:600">Brand</div>
+      <div style="display:flex;gap:8px"><div style="flex:1;height:64px;border-radius:8px;background:#14233D"></div><div style="flex:1;height:64px;border-radius:8px;background:#3B6FF5"></div></div>
+      <div style="font-size:12px;color:#868B94;line-height:1.6">main <b style="color:#1A1C20">#14233D</b> — 로고, 1차 버튼(로그인/시작), 푸터<br>sub <b style="color:#1A1C20">#3B6FF5</b> — 활성 내비, 링크, 액션 버튼</div>
+    </div>
+    <div style="background:#FEFEFE;border-radius:12px;padding:18px;box-shadow:2px 4px 20px rgba(0,0,0,.04);display:flex;flex-direction:column;gap:10px">
+      <div style="font-size:14px;font-weight:600">Gray 50–900</div>
+      <div style="display:flex;gap:2px"><div style="flex:1;height:40px;background:#F7F8F9;border-radius:6px 0 0 6px"></div><div style="flex:1;height:40px;background:#F3F4F5"></div><div style="flex:1;height:40px;background:#EEEFF1"></div><div style="flex:1;height:40px;background:#DCDEE3"></div><div style="flex:1;height:40px;background:#D1D3D8"></div><div style="flex:1;height:40px;background:#B0B3BA"></div><div style="flex:1;height:40px;background:#868B94"></div><div style="flex:1;height:40px;background:#555D6D"></div><div style="flex:1;height:40px;background:#2A3038"></div><div style="flex:1;height:40px;background:#1A1C20;border-radius:0 6px 6px 0"></div></div>
+      <div style="font-size:12px;color:#868B94;line-height:1.6">50 <b style="color:#1A1C20">#F7F8F9</b> 페이지 배경 · 300 <b style="color:#1A1C20">#DCDEE3</b> 구분선 · 500 <b style="color:#1A1C20">#B0B3BA</b> 입력 테두리 · 600 <b style="color:#1A1C20">#868B94</b> 보조 텍스트 · 900 <b style="color:#1A1C20">#1A1C20</b> 본문</div>
+    </div>
+    <div style="background:#FEFEFE;border-radius:12px;padding:18px;box-shadow:2px 4px 20px rgba(0,0,0,.04);display:flex;flex-direction:column;gap:10px">
+      <div style="font-size:14px;font-weight:600">Blue 50–900</div>
+      <div style="display:flex;gap:2px"><div style="flex:1;height:40px;background:#F2F8FF;border-radius:6px 0 0 6px"></div><div style="flex:1;height:40px;background:#E5F0FF"></div><div style="flex:1;height:40px;background:#CCE1FF"></div><div style="flex:1;height:40px;background:#B2D2FF"></div><div style="flex:1;height:40px;background:#99C4FF"></div><div style="flex:1;height:40px;background:#4D97FF"></div><div style="flex:1;height:40px;background:#006AFF"></div><div style="flex:1;height:40px;background:#0057D1"></div><div style="flex:1;height:40px;background:#00429E"></div><div style="flex:1;height:40px;background:#002F70;border-radius:0 6px 6px 0"></div></div>
+      <div style="font-size:12px;color:#868B94;line-height:1.6">100 <b style="color:#1A1C20">#E5F0FF</b> 플랜 칩·선택 배경 · 600 <b style="color:#1A1C20">#006AFF</b> 포커스 테두리(border/focus)</div>
+    </div>
+    <div style="background:#FEFEFE;border-radius:12px;padding:18px;box-shadow:2px 4px 20px rgba(0,0,0,.04);display:flex;flex-direction:column;gap:10px">
+      <div style="font-size:14px;font-weight:600">Error · Success</div>
+      <div style="display:flex;gap:2px"><div style="flex:1;height:40px;background:#FFF1F0;border-radius:6px 0 0 6px"></div><div style="flex:1;height:40px;background:#FFE0DD"></div><div style="flex:1;height:40px;background:#FF9C93"></div><div style="flex:1;height:40px;background:#FF3B2E"></div><div style="flex:1;height:40px;background:#E01F12"></div><div style="flex:1;height:40px;background:#B3160C;border-radius:0 6px 6px 0"></div></div>
+      <div style="display:flex;gap:2px"><div style="flex:1;height:40px;background:#EEFBF3;border-radius:6px 0 0 6px"></div><div style="flex:1;height:40px;background:#D6F5E3"></div><div style="flex:1;height:40px;background:#7ADAA6"></div><div style="flex:1;height:40px;background:#12A85F"></div><div style="flex:1;height:40px;background:#0D8A4E"></div><div style="flex:1;height:40px;background:#0A6B3D;border-radius:0 6px 6px 0"></div></div>
+      <div style="font-size:12px;color:#868B94;line-height:1.6">error/600 <b style="color:#1A1C20">#E01F12</b> 삭제·위험 버튼 · error/50 <b style="color:#1A1C20">#FFF1F0</b> 위험 카드 배경 · success/500 <b style="color:#1A1C20">#12A85F</b> 정상 상태</div>
+    </div>
+  </div>
+  <div style="background:#FEFEFE;border-radius:12px;padding:18px 22px;box-shadow:2px 4px 20px rgba(0,0,0,.04)">
+    <div style="font-size:14px;font-weight:600;margin-bottom:12px">Semantic (Light) — 피그마 변수 그대로 + 이 프로젝트에서 추가한 위험 등급 3종</div>
+    <div style="display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px 20px;font-size:13px;line-height:1.5">
+      <div><span style="display:inline-block;width:14px;height:14px;border-radius:4px;background:#1A1C20;vertical-align:-2px;margin-right:8px"></span>text/default → gray/900</div>
+      <div><span style="display:inline-block;width:14px;height:14px;border-radius:4px;background:#868B94;vertical-align:-2px;margin-right:8px"></span>text/secondary → gray/600</div>
+      <div><span style="display:inline-block;width:14px;height:14px;border-radius:4px;background:#D23531;vertical-align:-2px;margin-right:8px"></span>text/error → error/main</div>
+      <div><span style="display:inline-block;width:14px;height:14px;border-radius:4px;background:#F7F8F9;border:1px solid #DCDEE3;vertical-align:-2px;margin-right:8px"></span>text/inverse → gray/50</div>
+      <div><span style="display:inline-block;width:14px;height:14px;border-radius:4px;background:#006AFF;vertical-align:-2px;margin-right:8px"></span>action/primary → blue/600</div>
+      <div><span style="display:inline-block;width:14px;height:14px;border-radius:4px;background:#F7F8F9;border:1px solid #DCDEE3;vertical-align:-2px;margin-right:8px"></span>surface/default → gray/50</div>
+      <div><span style="display:inline-block;width:14px;height:14px;border-radius:4px;background:#F3F4F5;border:1px solid #DCDEE3;vertical-align:-2px;margin-right:8px"></span>surface/subtle → gray/100</div>
+      <div><span style="display:inline-block;width:14px;height:14px;border-radius:4px;background:#FFF1F0;border:1px solid #DCDEE3;vertical-align:-2px;margin-right:8px"></span>surface/error → error/50</div>
+      <div><span style="display:inline-block;width:14px;height:14px;border-radius:4px;background:#DCDEE3;vertical-align:-2px;margin-right:8px"></span>border/default → gray/300</div>
+      <div><span style="display:inline-block;width:14px;height:14px;border-radius:4px;background:#B0B3BA;vertical-align:-2px;margin-right:8px"></span>border/strong → gray/500</div>
+      <div><span style="display:inline-block;width:14px;height:14px;border-radius:4px;background:#006AFF;vertical-align:-2px;margin-right:8px"></span>border/focus → blue/600</div>
+      <div><span style="display:inline-block;width:14px;height:14px;border-radius:4px;background:#FF3B2E;vertical-align:-2px;margin-right:8px"></span>border/error → error/500</div>
+      <div style="color:#E01F12"><span style="display:inline-block;width:14px;height:14px;border-radius:4px;background:#E01F12;vertical-align:-2px;margin-right:8px"></span><b>risk/high</b> → error/600 <span style="color:#868B94">(추가)</span></div>
+      <div style="color:#B86A00"><span style="display:inline-block;width:14px;height:14px;border-radius:4px;background:#F9A403;vertical-align:-2px;margin-right:8px"></span><b>risk/medium</b> → #F9A403 <span style="color:#868B94">(추가, 로고 노랑)</span></div>
+      <div style="color:#555D6D"><span style="display:inline-block;width:14px;height:14px;border-radius:4px;background:#868B94;vertical-align:-2px;margin-right:8px"></span><b>risk/low</b> → gray/600 <span style="color:#868B94">(추가)</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- 타이포 -->
+<div style="display:flex;flex-direction:column;gap:18px">
+  <div style="font-size:20px;font-weight:600">2. 타이포 — Pretendard (로고만 Prompt Bold)</div>
+  <div style="background:#FEFEFE;border-radius:12px;padding:22px 26px;box-shadow:2px 4px 20px rgba(0,0,0,.04);display:grid;grid-template-columns:200px 1fr 260px;gap:14px 24px;align-items:baseline;font-size:13px;color:#868B94">
+    <div>Display · 40/600</div><div style="font-size:40px;font-weight:600;color:#1A1C20;line-height:1.3">매장 CCTV 영상 하나로</div><div>웹 히어로 전용 (피그마 48→40)</div>
+    <div>H1 · 32/600</div><div style="font-size:32px;font-weight:600;color:#1A1C20;line-height:1.3">위험 기록</div><div>페이지 제목 (피그마 '내 영상' 32 그대로)</div>
+    <div>H2 · 24/600</div><div style="font-size:24px;font-weight:600;color:#1A1C20;line-height:1.4">발견된 의심 구간 (3)</div><div>카드 제목 (피그마 24 그대로)</div>
+    <div>H3 · 20/600</div><div style="font-size:20px;font-weight:600;color:#1A1C20;line-height:1.4">계산대 · 절도 의심</div><div>리스트 항목 제목 (피그마 24→20)</div>
+    <div>Body · 16/500</div><div style="font-size:16px;font-weight:500;color:#1A1C20;line-height:1.5">AI가 영상을 분석하여 3개의 의심 구간을 발견했습니다.</div><div>본문·버튼 (피그마 20→16)</div>
+    <div>Body-sm · 14/500</div><div style="font-size:14px;font-weight:500;color:#868B94;line-height:1.5">2026. 07. 10 오전 5:26:36</div><div>보조 텍스트, 시각 (피그마 16→14)</div>
+    <div>Caption · 13/400</div><div style="font-size:13px;font-weight:400;color:#868B94;line-height:1.5">Pro 플랜은 영상을 업로드일로부터 7일간 보관합니다.</div><div>설명·힌트 (피그마 13 그대로)</div>
+    <div>Mono-number · 14/500</div><div style="font-size:14px;font-weight:500;color:#1A1C20;font-variant-numeric:tabular-nums;line-height:1.5">14:32:10 – 14:32:41 · 31초</div><div>타임코드 (tabular-nums)</div>
+  </div>
+  <div style="font-size:13px;color:#868B94">letter-spacing -0.01em 전역 · line-height 1.4~1.5 · 이 스케일이 마음에 안 들면 피그마 원본(24/20/16)으로 되돌릴 수 있음</div>
+</div>
+
+<!-- 형태 -->
+<div style="display:flex;flex-direction:column;gap:18px">
+  <div style="font-size:20px;font-weight:600">3. 형태 — 반경 · 그림자 · 간격</div>
+  <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px">
+    <div style="background:#FEFEFE;border-radius:12px;padding:18px;box-shadow:2px 4px 20px rgba(0,0,0,.04)"><div style="font-size:14px;font-weight:600;margin-bottom:10px">반경</div><div style="display:flex;gap:12px;align-items:flex-end"><div style="width:56px;height:56px;border-radius:8px;background:#E5F0FF;display:flex;align-items:center;justify-content:center;font-size:12px;color:#3B6FF5">8</div><div style="width:56px;height:56px;border-radius:12px;background:#E5F0FF;display:flex;align-items:center;justify-content:center;font-size:12px;color:#3B6FF5">12</div><div style="width:56px;height:56px;border-radius:16px;background:#E5F0FF;display:flex;align-items:center;justify-content:center;font-size:12px;color:#3B6FF5">16</div><div style="width:80px;height:36px;border-radius:99px;background:#E5F0FF;display:flex;align-items:center;justify-content:center;font-size:12px;color:#3B6FF5">99</div></div><div style="font-size:12px;color:#868B94;margin-top:10px;line-height:1.6">8 작은 버튼·토큰 · 12 카드·입력·버튼 · 16 큰 패널 · 99 칩/플랜</div></div>
+    <div style="background:#FEFEFE;border-radius:12px;padding:18px;box-shadow:2px 4px 20px rgba(0,0,0,.04)"><div style="font-size:14px;font-weight:600;margin-bottom:10px">그림자</div><div style="display:flex;gap:16px"><div style="flex:1;height:72px;border-radius:12px;background:#FEFEFE;box-shadow:2px 4px 20px rgba(0,0,0,.04);display:flex;align-items:center;justify-content:center;font-size:12px;color:#868B94">card</div><div style="flex:1;height:72px;border-radius:12px;background:#FEFEFE;box-shadow:0 12px 40px rgba(20,35,61,.16);display:flex;align-items:center;justify-content:center;font-size:12px;color:#868B94">modal</div></div><div style="font-size:12px;color:#868B94;margin-top:10px;line-height:1.6">card <b style="color:#1A1C20">2px 4px 20px rgba(0,0,0,.04)</b> (피그마) · modal <b style="color:#1A1C20">0 12px 40px rgba(20,35,61,.16)</b> (추가)</div></div>
+    <div style="background:#FEFEFE;border-radius:12px;padding:18px;box-shadow:2px 4px 20px rgba(0,0,0,.04)"><div style="font-size:14px;font-weight:600;margin-bottom:10px">간격</div><div style="display:flex;gap:6px;align-items:flex-end"><div style="width:8px;height:8px;background:#3B6FF5"></div><div style="width:12px;height:12px;background:#3B6FF5"></div><div style="width:16px;height:16px;background:#3B6FF5"></div><div style="width:20px;height:20px;background:#3B6FF5"></div><div style="width:24px;height:24px;background:#3B6FF5"></div><div style="width:32px;height:32px;background:#3B6FF5"></div><div style="width:40px;height:40px;background:#3B6FF5"></div></div><div style="font-size:12px;color:#868B94;margin-top:10px;line-height:1.6">8·12·16·20·24·32·40 · 페이지 좌우 여백 40 (내비와 동일) · 카드 내부 24 · 카드 간 16</div></div>
+  </div>
+</div>
+
+<!-- 컴포넌트 -->
+<div style="display:flex;flex-direction:column;gap:18px">
+  <div style="font-size:20px;font-weight:600">4. 컴포넌트</div>
+
+  <div style="background:#FEFEFE;border-radius:12px;box-shadow:2px 4px 20px rgba(0,0,0,.04);overflow:hidden">
+    <div style="padding:14px 22px;font-size:14px;font-weight:600;border-bottom:1px solid #EEEFF1">상단 내비게이션 (피그마 'top navagation bar' — PC 앱은 사이드바 대신 이걸 씀)</div>
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:20px 40px;background:#FEFEFE">
+      <div style="display:flex;align-items:center;gap:48px">
+        <div style="display:flex;align-items:center;gap:10px"><img src="ds/assets/logo-mark-navy.svg" style="width:30px;height:27px" alt=""><span style="font-family:Prompt,sans-serif;font-weight:700;font-size:22px;color:#14233D;line-height:1">Scene Stealer</span></div>
+        <div style="display:flex;gap:36px;font-size:18px;font-weight:600;color:#1A1C20"><span style="color:#3B6FF5">실시간</span><span>위험 기록</span><span>카메라</span><span>설정</span></div>
+      </div>
+      <div style="display:flex;align-items:center;gap:24px">
+        <span style="background:#E5F0FF;color:#3B6FF5;border-radius:99px;padding:8px 22px;font-size:16px;font-weight:600">강남 1호점 ▾</span>
+        <span style="display:flex;align-items:center;gap:6px;font-size:18px;font-weight:600"><img src="ds/assets/icon-user-dark.svg" style="width:20px;height:24px" alt="">홍길동님</span>
+        <span style="font-size:18px;font-weight:600">로그아웃</span>
+      </div>
+    </div>
+    <div style="padding:10px 22px;font-size:12px;color:#868B94;border-top:1px solid #EEEFF1">활성 항목 = sub blue · 플랜 칩 자리에 <b>매장 선택기</b>를 넣음 (요금제는 제외) · 높이 76 (피그마 96 → 밀도 조정)</div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+    <div style="background:#FEFEFE;border-radius:12px;padding:22px;box-shadow:2px 4px 20px rgba(0,0,0,.04);display:flex;flex-direction:column;gap:14px">
+      <div style="font-size:14px;font-weight:600">버튼</div>
+      <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center">
+        <span style="background:#14233D;color:#fff;border-radius:12px;padding:12px 24px;font-size:16px;font-weight:600">감시 시작</span>
+        <span style="background:#3B6FF5;color:#fff;border-radius:8px;padding:10px 20px;font-size:15px;font-weight:600">+ 카메라 추가</span>
+        <span style="background:#FEFEFE;color:#1A1C20;border-radius:8px;padding:10px 20px;font-size:15px;font-weight:600;box-shadow:inset 0 0 0 1px #DCDEE3">클립 저장</span>
+        <span style="background:#E01F12;color:#fff;border-radius:8px;padding:10px 20px;font-size:15px;font-weight:600">112 신고</span>
+        <span style="background:#FEFEFE;color:#D23531;border-radius:8px;padding:10px 20px;font-size:15px;font-weight:600;box-shadow:inset 0 0 0 1px #FF9C93">삭제</span>
+        <span style="background:#DCDEE3;color:#fff;border-radius:12px;padding:12px 24px;font-size:16px;font-weight:600">연결 중...</span>
+        <span style="color:#3B6FF5;font-size:15px;font-weight:600;text-decoration:underline">전체 기록 보기</span>
+      </div>
+      <div style="font-size:12px;color:#868B94;line-height:1.6">primary(navy, r12) = 흐름을 끝내는 1개 버튼 · action(blue, r8) = 페이지 안 주요 액션 · secondary(outline) · danger(error/600) = 112·삭제 · loading = gray/300 · 텍스트 링크</div>
+    </div>
+    <div style="background:#FEFEFE;border-radius:12px;padding:22px;box-shadow:2px 4px 20px rgba(0,0,0,.04);display:flex;flex-direction:column;gap:14px">
+      <div style="font-size:14px;font-weight:600">입력 (피그마 input 5상태)</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <div style="display:flex;flex-direction:column;gap:6px"><span style="font-size:14px;font-weight:600">카메라 이름</span><div style="height:48px;border-radius:12px;background:#FEFEFE;box-shadow:inset 0 0 0 1px #B0B3BA;display:flex;align-items:center;padding:0 16px;font-size:15px;color:#868B94">예: 계산대</div></div>
+        <div style="display:flex;flex-direction:column;gap:6px"><span style="font-size:14px;font-weight:600">카메라 이름</span><div style="height:48px;border-radius:12px;background:#FEFEFE;box-shadow:inset 0 0 0 1px #006AFF;display:flex;align-items:center;padding:0 16px;font-size:15px;gap:2px"><span style="width:2px;height:20px;border-radius:99px;background:#3B6FF5"></span>계산대</div></div>
+        <div style="display:flex;flex-direction:column;gap:6px"><span style="font-size:14px;font-weight:600">비밀번호</span><div style="height:48px;border-radius:12px;background:#FEFEFE;box-shadow:inset 0 0 0 1px #FF3B2E;display:flex;align-items:center;padding:0 16px;font-size:15px">••••••</div><span style="font-size:13px;color:#D23531">비밀번호가 틀렸습니다 (3회 남음)</span></div>
+        <div style="display:flex;flex-direction:column;gap:6px"><span style="font-size:14px;font-weight:600">RTSP 주소</span><div style="height:48px;border-radius:12px;background:#F3F4F5;box-shadow:inset 0 0 0 1px #DCDEE3;display:flex;align-items:center;padding:0 16px;font-size:15px;color:#1A1C20">rtsp://192.168.0.64/… <span style="margin-left:auto;color:#12A85F">✓</span></div></div>
+      </div>
+      <div style="font-size:12px;color:#868B94">높이 48 (피그마 80 → 축소) · r12 · default gray/500 · focus blue/600 + 캐럿 · error error/500 + 13px 메시지 · done 회색 채움</div>
+    </div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px">
+    <div style="background:#FEFEFE;border-radius:12px;padding:22px;box-shadow:2px 4px 20px rgba(0,0,0,.04);display:flex;flex-direction:column;gap:14px">
+      <div style="font-size:14px;font-weight:600">위험 등급 태그 · 상태 점</div>
+      <div style="display:flex;flex-wrap:wrap;gap:8px">
+        <span style="background:#E01F12;color:#fff;border-radius:99px;padding:4px 12px;font-size:13px;font-weight:600">높음</span>
+        <span style="background:#FFF1F0;color:#D23531;border-radius:99px;padding:4px 12px;font-size:13px;font-weight:600">절도 의심</span>
+        <span style="background:#FFF6E0;color:#B86A00;border-radius:99px;padding:4px 12px;font-size:13px;font-weight:600">보통</span>
+        <span style="background:#F3F4F5;color:#555D6D;border-radius:99px;padding:4px 12px;font-size:13px;font-weight:600">낮음</span>
+        <span style="background:#E5F0FF;color:#3B6FF5;border-radius:99px;padding:4px 12px;font-size:13px;font-weight:600">미확인</span>
+        <span style="background:#EEFBF3;color:#0D8A4E;border-radius:99px;padding:4px 12px;font-size:13px;font-weight:600">확인됨</span>
+        <span style="background:#F3F4F5;color:#868B94;border-radius:99px;padding:4px 12px;font-size:13px;font-weight:600;text-decoration:line-through">오탐</span>
+      </div>
+      <div style="display:flex;gap:18px;font-size:14px;font-weight:500">
+        <span style="display:flex;align-items:center;gap:6px"><span style="width:8px;height:8px;border-radius:50%;background:#12A85F"></span>연결됨</span>
+        <span style="display:flex;align-items:center;gap:6px"><span style="width:8px;height:8px;border-radius:50%;background:#F9A403"></span>재연결 중</span>
+        <span style="display:flex;align-items:center;gap:6px"><span style="width:8px;height:8px;border-radius:50%;background:#E01F12"></span>끊김</span>
+        <span style="display:flex;align-items:center;gap:6px"><span style="width:8px;height:8px;border-radius:50%;background:#B0B3BA"></span>중지</span>
+      </div>
+      <div style="font-size:12px;color:#868B94">피그마 plan 칩(r99, blue/100) 형태를 태그 전체에 확장</div>
+    </div>
+    <div style="background:#FEFEFE;border-radius:12px;padding:22px;box-shadow:2px 4px 20px rgba(0,0,0,.04);display:flex;flex-direction:column;gap:14px">
+      <div style="font-size:14px;font-weight:600">토글 · 세그먼트 · 페이지네이션</div>
+      <div style="display:flex;align-items:center;gap:10px"><span style="width:44px;height:24px;border-radius:99px;background:#3B6FF5;position:relative;display:inline-block"><span style="position:absolute;right:2px;top:2px;width:20px;height:20px;border-radius:50%;background:#fff"></span></span><span style="width:44px;height:24px;border-radius:99px;background:#DCDEE3;position:relative;display:inline-block"><span style="position:absolute;left:2px;top:2px;width:20px;height:20px;border-radius:50%;background:#fff"></span></span><span style="font-size:14px;color:#868B94">on / off</span></div>
+      <div style="display:inline-flex;background:#F3F4F5;border-radius:8px;padding:4px;gap:2px;align-self:flex-start"><span style="background:#FEFEFE;border-radius:6px;padding:6px 14px;font-size:14px;font-weight:600;box-shadow:0 1px 2px rgba(0,0,0,.06)">전체 (5)</span><span style="padding:6px 14px;font-size:14px;font-weight:500;color:#868B94">미확인 (2)</span><span style="padding:6px 14px;font-size:14px;font-weight:500;color:#868B94">높음</span></div>
+      <div style="display:flex;gap:8px"><span style="width:36px;height:36px;border-radius:8px;background:#FEFEFE;box-shadow:2px 4px 20px rgba(0,0,0,.04);display:flex;align-items:center;justify-content:center;color:#868B94">‹</span><span style="width:36px;height:36px;border-radius:8px;background:#3B6FF5;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:600">1</span><span style="width:36px;height:36px;border-radius:8px;background:#FEFEFE;box-shadow:2px 4px 20px rgba(0,0,0,.04);display:flex;align-items:center;justify-content:center;color:#868B94">2</span><span style="width:36px;height:36px;border-radius:8px;background:#FEFEFE;box-shadow:2px 4px 20px rgba(0,0,0,.04);display:flex;align-items:center;justify-content:center;color:#868B94">›</span></div>
+    </div>
+    <div style="background:#FEFEFE;border-radius:12px;padding:22px;box-shadow:2px 4px 20px rgba(0,0,0,.04);display:flex;flex-direction:column;gap:14px">
+      <div style="font-size:14px;font-weight:600">카메라 타일 · 위험 클립 카드</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <div style="border-radius:12px;overflow:hidden;background:#F3F4F5;box-shadow:inset 0 0 0 1px #DCDEE3"><div style="aspect-ratio:16/9;background:#2A3038;position:relative"><span style="position:absolute;left:8px;top:8px;background:rgba(0,0,0,.5);color:#fff;font-size:11px;padding:2px 6px;border-radius:4px">CAM 01 · LIVE</span></div><div style="padding:8px 10px;display:flex;justify-content:space-between;font-size:13px;font-weight:600">계산대<span style="display:flex;align-items:center;gap:5px;color:#868B94;font-weight:500"><span style="width:7px;height:7px;border-radius:50%;background:#12A85F"></span>연결됨</span></div></div>
+        <div style="border-radius:12px;overflow:hidden;background:#FEFEFE;box-shadow:inset 0 0 0 2px #E01F12"><div style="aspect-ratio:16/9;background:#2A3038;position:relative"><span style="position:absolute;left:8px;top:8px;background:#E01F12;color:#fff;font-size:11px;padding:2px 6px;border-radius:4px;font-weight:600">위험 감지</span></div><div style="padding:8px 10px;font-size:13px"><b>절도 의심</b> <span style="color:#D23531;font-weight:600">높음</span><div style="color:#868B94;font-size:12px">계산대 · 14:32 · 미확인</div></div></div>
+      </div>
+      <div style="font-size:12px;color:#868B94">영상 영역은 gray/800 · 라이브 라벨 반투명 검정 · 위험 카드는 error/600 2px 테두리 (피그마 분석완료 화면의 클립 카드 확장)</div>
+    </div>
+  </div>
+</div>
+
+<div style="font-size:13px;color:#868B94;line-height:1.7;border-top:1px solid #DCDEE3;padding-top:20px">파일: <b>ds/fig-tokens.css</b> (94 변수, light/dark) · <b>ds/Components.bundle.js</b> (피그마 컴포넌트 9종 원본) · <b>ds/assets/</b> 로고·아이콘 · 이 페이지의 값이 PC 앱 화면(<a href="씬스틸러 PC 앱.dc.html">씬스틸러 PC 앱</a>)의 단일 출처.</div>
+</div>
+</x-dc>
+</body>
+</html>

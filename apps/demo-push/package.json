@@ -1,0 +1,19 @@
+{
+  "name": "@scene-stealer/demo-push",
+  "version": "0.0.0",
+  "private": true,
+  "description": "데모용 Web Push 발신기 (Cloudflare Worker · VAPID)",
+  "type": "module",
+  "scripts": {
+    "vapid": "node scripts/generate-vapid.mjs",
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:unit": "vitest run"
+  },
+  "devDependencies": {
+    "vitest": "^2.1.8",
+    "wrangler": "^4.0.0"
+  }
+}

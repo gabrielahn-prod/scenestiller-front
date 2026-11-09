@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet><meta name="design_doc_mode" content="canvas"><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css"><link href="https://fonts.googleapis.com/css2?family=Prompt:wght@700&display=swap" rel="stylesheet"><style>body{margin:0;background:#E4E6EA;font-family:Pretendard,-apple-system,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;color:#1A1C20;letter-spacing:-0.01em;font-variant-numeric:tabular-nums}a{color:#3B6FF5}a:hover{color:#0057D1}.scr{width:1440px;background:#F7F8F9;border-radius:12px;overflow:hidden;box-shadow:0 8px 32px rgba(20,35,61,.10);display:flex;flex-direction:column;flex:none}.lbl{font-size:13px;font-weight:600;color:#555D6D;display:flex;gap:8px;align-items:center}.lbl .id{font:600 11px ui-monospace,Menlo,monospace;background:#14233D;color:#fff;border-radius:4px;padding:3px 7px}.nav{display:flex;justify-content:space-between;align-items:center;padding:20px 40px;background:#FEFEFE;border-bottom:1px solid #EEEFF1;height:76px;box-sizing:border-box}.nav .m{display:flex;gap:36px;font-size:18px;font-weight:600}.nav .on{color:#3B6FF5}.card{background:#FEFEFE;border-radius:12px;box-shadow:2px 4px 20px rgba(0,0,0,.04)}.vid{background:#2A3038;background-image:linear-gradient(135deg,rgba(255,255,255,.04) 25%,transparent 25%,transparent 50%,rgba(255,255,255,.04) 50%,rgba(255,255,255,.04) 75%,transparent 75%);background-size:24px 24px;color:#B0B3BA;font-size:13px;display:flex;align-items:center;justify-content:center;position:relative}.tag{border-radius:99px;padding:4px 12px;font-size:13px;font-weight:600;display:inline-flex;align-items:center;white-space:nowrap}.dot{width:8px;height:8px;border-radius:50%;display:inline-block;flex:none}.bp{background:#14233D;color:#fff;border-radius:12px;padding:12px 24px;font-size:16px;font-weight:600;display:inline-flex;align-items:center;justify-content:center;gap:8px}.ba{background:#3B6FF5;color:#fff;border-radius:8px;padding:10px 20px;font-size:15px;font-weight:600;display:inline-flex;align-items:center;justify-content:center;gap:8px;white-space:nowrap}.bs{background:#FEFEFE;color:#1A1C20;border-radius:8px;padding:10px 20px;font-size:15px;font-weight:600;box-shadow:inset 0 0 0 1px #DCDEE3;display:inline-flex;align-items:center;justify-content:center;gap:8px;white-space:nowrap}.bd{background:#E01F12;color:#fff;border-radius:8px;padding:10px 20px;font-size:15px;font-weight:600;display:inline-flex;align-items:center;justify-content:center;gap:8px;white-space:nowrap}.inp{height:48px;border-radius:12px;background:#FEFEFE;box-shadow:inset 0 0 0 1px #B0B3BA;display:flex;align-items:center;padding:0 16px;font-size:15px;color:#868B94}.sec{color:#868B94}.sm{font-size:14px}.xs{font-size:13px}.b{font-weight:600}</style></helmet>
+
+<div style="padding:40px 48px;display:flex;flex-direction:column;gap:40px">
+<div style="display:flex;flex-direction:column;gap:6px;max-width:900px">
+  <div style="display:flex;align-items:center;gap:10px"><img src="ds/assets/logo-mark-navy.svg" style="width:28px;height:26px" alt=""><span style="font-family:Prompt,sans-serif;font-weight:700;font-size:22px;color:#14233D">Scene Stealer</span><span style="font-size:22px;font-weight:600;margin-left:6px">매장 PC 앱 — 하이파이</span></div>
+  <div style="font-size:14px;color:#555D6D;line-height:1.55">확정된 UX 뼈대(2a–2g)에 <a href="씬스틸러 디자인시스템.dc.html">디자인 시스템</a>을 적용. 웹의 분위기(흰 상단 내비 · 연회색 배경 · 흰 카드 · 네이비/블루)를 그대로 가져와 사이드바 대신 상단 내비로 통일. 1440×900 창 기준.</div>
+</div>
+
+<!-- 2a -->
+<div style="display:flex;flex-direction:column;gap:10px"><div class="lbl"><span class="id">2a</span>첫 실행 — 로그인 · 매장 연결</div>
+<div class="scr" style="height:900px">
+  <div class="nav"><div style="display:flex;align-items:center;gap:10px"><img src="ds/assets/logo-mark-navy.svg" style="width:30px;height:27px" alt=""><span style="font-family:Prompt,sans-serif;font-weight:700;font-size:22px;color:#14233D;line-height:1">Scene Stealer</span></div><span class="sm sec">매장 PC 수집기 v1.0</span></div>
+  <div style="flex:1;display:flex;align-items:center;justify-content:center;background:linear-gradient(180deg,#F7F8F9 0%,rgba(156,201,249,.28) 55%,#F7F8F9 100%)">
+    <div style="display:grid;grid-template-columns:460px 460px;gap:24px">
+      <div class="card" style="padding:40px;display:flex;flex-direction:column;gap:20px">
+        <div><div style="font-size:24px;font-weight:600">사장님 계정으로 로그인</div><div class="sm sec" style="margin-top:6px">모바일 앱과 같은 계정을 쓰면 푸시 알림이 자동으로 연결됩니다.</div></div>
+        <div style="display:flex;flex-direction:column;gap:6px"><span class="sm b">휴대폰 번호</span><div class="inp" style="box-shadow:inset 0 0 0 1px #006AFF;color:#1A1C20;gap:2px"><span style="width:2px;height:20px;border-radius:99px;background:#3B6FF5"></span>010-1234-</div></div>
+        <div style="display:flex;flex-direction:column;gap:6px"><span class="sm b">인증번호</span><div class="inp">6자리 <span style="margin-left:auto;color:#3B6FF5;font-weight:600;font-size:14px">인증번호 받기</span></div></div>
+        <div class="bp" style="margin-top:8px">로그인</div>
+        <div class="xs sec" style="text-align:center">개발자용 서버 주소·토큰 입력은 설정 ▸ 고급에 있습니다</div>
+      </div>
+      <div class="card" style="padding:40px;display:flex;flex-direction:column;gap:20px">
+        <div><div style="font-size:24px;font-weight:600">이 PC가 있는 매장</div><div class="sm sec" style="margin-top:6px">PC 한 대는 매장 하나를 감시합니다.</div></div>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <div style="border-radius:12px;padding:16px 18px;background:#E5F0FF;box-shadow:inset 0 0 0 1.5px #3B6FF5;display:flex;justify-content:space-between;align-items:center"><div><div style="font-size:16px;font-weight:600">강남 1호점</div><div class="xs sec" style="margin-top:2px">카메라 5대 등록 · 연결된 PC 없음</div></div><span style="width:22px;height:22px;border-radius:50%;background:#3B6FF5;color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:13px">✓</span></div>
+          <div style="border-radius:12px;padding:16px 18px;background:#FEFEFE;box-shadow:inset 0 0 0 1px #DCDEE3;display:flex;justify-content:space-between;align-items:center"><div><div style="font-size:16px;font-weight:600">역삼점</div><div class="xs" style="margin-top:2px;color:#B86A00">다른 PC가 연결돼 있음 — 선택하면 교체</div></div></div>
+          <div style="border-radius:12px;padding:16px 18px;border:1.5px dashed #B0B3BA;color:#868B94;text-align:center;font-size:15px;font-weight:500">+ 새 매장 만들기</div>
+        </div>
+        <div style="display:flex;gap:10px;margin-top:auto;align-items:center"><div style="width:72px;height:72px;border-radius:8px;background:#F3F4F5;box-shadow:inset 0 0 0 1px #DCDEE3;display:flex;align-items:center;justify-content:center;font-size:11px;color:#868B94">QR</div><div class="xs sec" style="line-height:1.5">또는 모바일 앱 ▸ 설정 ▸ 'PC 연결'에서 이 QR을 스캔하면 로그인·매장 선택이 한 번에 끝납니다.</div></div>
+        <div class="ba" style="align-self:flex-end;padding:12px 24px;font-size:16px">다음: 카메라 추가 →</div>
+      </div>
+    </div>
+  </div>
+</div></div>
+
+<!-- 2b -->
+<div style="display:flex;flex-direction:column;gap:10px"><div class="lbl"><span class="id">2b</span>카메라 추가 위저드 — ② 연결 확인 단계 (①/③은 좌우 패널)</div>
+<div class="scr" style="height:900px">
+  <div class="nav"><div style="display:flex;align-items:center;gap:48px"><div style="display:flex;align-items:center;gap:10px"><img src="ds/assets/logo-mark-navy.svg" style="width:30px;height:27px" alt=""><span style="font-family:Prompt,sans-serif;font-weight:700;font-size:22px;color:#14233D;line-height:1">Scene Stealer</span></div><div class="m"><span>실시간</span><span>위험 기록</span><span class="on">카메라</span><span>설정</span></div></div><div style="display:flex;align-items:center;gap:24px"><span class="tag" style="background:#E5F0FF;color:#3B6FF5;padding:8px 22px;font-size:16px">강남 1호점 ▾</span><span style="display:flex;align-items:center;gap:6px;font-size:18px;font-weight:600"><img src="ds/assets/icon-user-dark.svg" style="width:18px;height:22px" alt="">홍길동님</span><span style="font-size:18px;font-weight:600">로그아웃</span></div></div>
+  <div style="padding:32px 40px;display:flex;flex-direction:column;gap:20px;flex:1">
+    <div style="display:flex;justify-content:space-between;align-items:flex-end"><div><div style="font-size:32px;font-weight:600">카메라 추가</div><div class="sm sec" style="margin-top:4px">3 / 8대 등록됨 · 같은 공유기에 연결된 카메라를 자동으로 찾습니다</div></div>
+      <div style="display:flex;align-items:center;gap:10px;font-size:14px;font-weight:600"><span style="display:flex;align-items:center;gap:6px;color:#12A85F"><span style="width:24px;height:24px;border-radius:50%;background:#12A85F;color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:12px">✓</span>찾기</span><span style="width:32px;height:1px;background:#DCDEE3"></span><span style="display:flex;align-items:center;gap:6px;color:#3B6FF5"><span style="width:24px;height:24px;border-radius:50%;background:#3B6FF5;color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:12px">2</span>연결 확인</span><span style="width:32px;height:1px;background:#DCDEE3"></span><span style="display:flex;align-items:center;gap:6px;color:#868B94"><span style="width:24px;height:24px;border-radius:50%;box-shadow:inset 0 0 0 1.5px #DCDEE3;display:inline-flex;align-items:center;justify-content:center;font-size:12px">3</span>이름·설정</span></div></div>
+    <div style="display:grid;grid-template-columns:380px 1fr 400px;gap:16px;flex:1;min-height:0">
+      <div class="card" style="padding:24px;display:flex;flex-direction:column;gap:14px">
+        <div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:20px;font-weight:600">① 찾은 카메라</span><span style="color:#3B6FF5;font-size:14px;font-weight:600">다시 검색</span></div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <div style="border-radius:12px;padding:14px 16px;background:#E5F0FF;box-shadow:inset 0 0 0 1.5px #3B6FF5;display:flex;justify-content:space-between;align-items:center"><div><div class="b" style="font-size:15px">Hikvision DS-2CD2143</div><div class="xs sec">192.168.0.64 · ONVIF</div></div><span class="tag" style="background:#3B6FF5;color:#fff">선택됨</span></div>
+          <div style="border-radius:12px;padding:14px 16px;box-shadow:inset 0 0 0 1px #DCDEE3;display:flex;justify-content:space-between;align-items:center;opacity:.55"><div><div class="b" style="font-size:15px">Dahua IPC-HDW</div><div class="xs sec">192.168.0.71 · '출입문'으로 등록됨</div></div><span class="xs sec">추가됨</span></div>
+          <div style="border-radius:12px;padding:14px 16px;box-shadow:inset 0 0 0 1px #DCDEE3;display:flex;justify-content:space-between;align-items:center"><div><div class="b" style="font-size:15px">알 수 없는 카메라</div><div class="xs sec">192.168.0.88 · ONVIF</div></div><span class="bs" style="padding:6px 14px;font-size:13px">추가</span></div>
+        </div>
+        <div style="color:#3B6FF5;font-size:14px;font-weight:600">카메라가 안 보이나요? → 주소 직접 입력</div>
+        <div style="margin-top:auto;border-radius:12px;background:#F3F4F5;padding:14px 16px;font-size:13px;color:#555D6D;line-height:1.55">안 잡히는 흔한 이유: 카메라가 다른 공유기에 있음 / 카메라 ONVIF 설정이 꺼져 있음 → <span style="color:#3B6FF5;font-weight:600">켜는 방법 보기</span></div>
+      </div>
+      <div class="card" style="padding:24px;display:flex;flex-direction:column;gap:16px">
+        <div style="font-size:20px;font-weight:600">② 비밀번호 넣고 화면 확인</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr auto;gap:10px;align-items:end">
+          <div style="display:flex;flex-direction:column;gap:6px"><span class="sm b">아이디</span><div class="inp" style="color:#1A1C20;background:#F3F4F5;box-shadow:inset 0 0 0 1px #DCDEE3">admin</div></div>
+          <div style="display:flex;flex-direction:column;gap:6px"><span class="sm b">비밀번호</span><div class="inp" style="color:#1A1C20;box-shadow:inset 0 0 0 1px #006AFF">••••••••</div></div>
+          <div class="ba" style="height:48px">확인</div>
+        </div>
+        <div class="xs sec" style="margin-top:-6px">카메라 뒷면 스티커나 설치 기사님이 준 비밀번호입니다</div>
+        <div class="vid" style="flex:1;border-radius:12px;min-height:300px"><span style="position:absolute;left:12px;top:12px;background:rgba(0,0,0,.55);color:#fff;font-size:12px;padding:4px 8px;border-radius:6px">CAM 04 · 2026-09-16 14:31:52</span>실시간 미리보기 — 2초마다 갱신<span style="position:absolute;right:12px;bottom:12px;background:#12A85F;color:#fff;font-size:12px;padding:4px 10px;border-radius:99px;font-weight:600">연결 성공 · 704×480</span></div>
+        <div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:16px;font-weight:600">이 화면이 맞나요?</span><div style="display:flex;gap:10px"><span class="bs">아니요, 다른 카메라</span><span class="ba" style="padding:10px 28px">네, 다음 →</span></div></div>
+      </div>
+      <div class="card" style="padding:24px;display:flex;flex-direction:column;gap:16px;opacity:.55">
+        <div style="font-size:20px;font-weight:600">③ 이름 · 위치 · 설정</div>
+        <div style="display:flex;flex-direction:column;gap:6px"><span class="sm b">이름 <span class="sec" style="font-weight:400">— 알림에 이렇게 표시</span></span><div class="inp">예: 계산대</div></div>
+        <div style="display:flex;flex-direction:column;gap:8px"><span class="sm b">위치 태그 <span class="sec" style="font-weight:400">— AI 판단에 사용</span></span><div style="display:flex;flex-wrap:wrap;gap:6px"><span class="tag" style="background:#14233D;color:#fff">계산대</span><span class="tag" style="box-shadow:inset 0 0 0 1px #DCDEE3;color:#555D6D">출입문</span><span class="tag" style="box-shadow:inset 0 0 0 1px #DCDEE3;color:#555D6D">진열대</span><span class="tag" style="box-shadow:inset 0 0 0 1px #DCDEE3;color:#555D6D">취식대</span><span class="tag" style="box-shadow:inset 0 0 0 1px #DCDEE3;color:#555D6D">창고</span></div></div>
+        <div style="display:flex;flex-direction:column;gap:8px"><span class="sm b">화질</span><div style="display:flex;gap:8px"><div style="flex:1;border-radius:12px;padding:12px 14px;background:#E5F0FF;box-shadow:inset 0 0 0 1.5px #3B6FF5"><div class="b" style="font-size:15px">표준 <span class="xs" style="color:#3B6FF5">권장</span></div><div class="xs sec">704×480 · 약 2GB/일</div></div><div style="flex:1;border-radius:12px;padding:12px 14px;box-shadow:inset 0 0 0 1px #DCDEE3"><div class="b" style="font-size:15px">고화질</div><div class="xs sec">1920×1080 · 약 16GB/일</div></div></div></div>
+        <div style="display:flex;flex-direction:column;gap:8px"><span class="sm b">알림 빠르기 <span class="sec" style="font-weight:400">— 모든 카메라 공통</span></span><div style="display:inline-flex;background:#F3F4F5;border-radius:8px;padding:4px;gap:2px"><span style="flex:1;text-align:center;padding:8px;font-size:14px;color:#868B94">30초</span><span style="flex:1;text-align:center;background:#FEFEFE;border-radius:6px;padding:8px;font-size:14px;font-weight:600;box-shadow:0 1px 2px rgba(0,0,0,.06)">1분</span><span style="flex:1;text-align:center;padding:8px;font-size:14px;color:#868B94">5분</span></div><div class="xs sec">알림은 최대 이 시간만큼 늦게 옵니다. 절도는 보통 30초 안에 끝납니다.</div></div>
+        <div class="bp" style="margin-top:auto">감시 시작</div>
+      </div>
+    </div>
+  </div>
+</div></div>
+
+<!-- 2c -->
+<div style="display:flex;flex-direction:column;gap:10px"><div class="lbl"><span class="id">2c</span>홈 — 실시간 모니터링 (평상시)</div>
+<div class="scr" style="height:900px">
+  <div class="nav"><div style="display:flex;align-items:center;gap:48px"><div style="display:flex;align-items:center;gap:10px"><img src="ds/assets/logo-mark-navy.svg" style="width:30px;height:27px" alt=""><span style="font-family:Prompt,sans-serif;font-weight:700;font-size:22px;color:#14233D;line-height:1">Scene Stealer</span></div><div class="m"><span class="on">실시간</span><span style="display:flex;align-items:center;gap:6px">위험 기록<span style="background:#E01F12;color:#fff;border-radius:99px;font-size:12px;padding:1px 7px">2</span></span><span>카메라</span><span>설정</span></div></div><div style="display:flex;align-items:center;gap:24px"><span class="tag" style="background:#E5F0FF;color:#3B6FF5;padding:8px 22px;font-size:16px">강남 1호점 ▾</span><span style="display:flex;align-items:center;gap:6px;font-size:18px;font-weight:600"><img src="ds/assets/icon-user-dark.svg" style="width:18px;height:22px" alt="">홍길동님</span><span style="font-size:18px;font-weight:600">로그아웃</span></div></div>
+  <div style="padding:28px 40px 32px;display:grid;grid-template-columns:1fr 380px;gap:16px;flex:1;min-height:0">
+    <div style="display:flex;flex-direction:column;gap:16px;min-width:0">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <div style="display:flex;align-items:center;gap:20px"><span style="font-size:32px;font-weight:600">실시간</span><span class="sm" style="display:flex;align-items:center;gap:6px;font-weight:600;color:#0D8A4E"><span class="dot" style="background:#12A85F"></span>감시 중 4/5대</span><span class="sm" style="display:flex;align-items:center;gap:6px;font-weight:600;color:#0D8A4E"><span class="dot" style="background:#12A85F"></span>서버 전송 정상</span><span class="sm sec">마지막 AI 분석 14:31 · 알림 지연 최대 1분</span></div>
+        <div style="display:flex;gap:10px"><div style="display:inline-flex;background:#F3F4F5;border-radius:8px;padding:4px;gap:2px"><span style="background:#FEFEFE;border-radius:6px;padding:6px 12px;font-size:14px;font-weight:600;box-shadow:0 1px 2px rgba(0,0,0,.06)">▦ 격자</span><span style="padding:6px 12px;font-size:14px;color:#868B94">▭ 하나 크게</span></div><span class="bs">일시 중지 (영업 중)</span></div>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;flex:1">
+        <div class="card" style="overflow:hidden;display:flex;flex-direction:column"><div class="vid" style="flex:1"><span style="position:absolute;left:10px;top:10px;background:rgba(0,0,0,.55);color:#fff;font-size:12px;padding:3px 8px;border-radius:6px">CAM 01 · LIVE</span></div><div style="padding:10px 14px;display:flex;justify-content:space-between;align-items:center"><span class="b" style="font-size:15px">계산대</span><span class="xs sec" style="display:flex;align-items:center;gap:5px"><span class="dot" style="background:#12A85F;width:7px;height:7px"></span>연결됨 · 방금 분석</span></div></div>
+        <div class="card" style="overflow:hidden;display:flex;flex-direction:column"><div class="vid" style="flex:1"><span style="position:absolute;left:10px;top:10px;background:rgba(0,0,0,.55);color:#fff;font-size:12px;padding:3px 8px;border-radius:6px">CAM 02 · LIVE</span></div><div style="padding:10px 14px;display:flex;justify-content:space-between;align-items:center"><span class="b" style="font-size:15px">출입문</span><span class="xs sec" style="display:flex;align-items:center;gap:5px"><span class="dot" style="background:#12A85F;width:7px;height:7px"></span>연결됨 · 1분 전</span></div></div>
+        <div class="card" style="overflow:hidden;display:flex;flex-direction:column"><div class="vid" style="flex:1"><span style="position:absolute;left:10px;top:10px;background:rgba(0,0,0,.55);color:#fff;font-size:12px;padding:3px 8px;border-radius:6px">CAM 03 · LIVE</span></div><div style="padding:10px 14px;display:flex;justify-content:space-between;align-items:center"><span class="b" style="font-size:15px">진열대 A</span><span class="xs sec" style="display:flex;align-items:center;gap:5px"><span class="dot" style="background:#12A85F;width:7px;height:7px"></span>연결됨 · 1분 전</span></div></div>
+        <div class="card" style="overflow:hidden;display:flex;flex-direction:column"><div class="vid" style="flex:1"><span style="position:absolute;left:10px;top:10px;background:rgba(0,0,0,.55);color:#fff;font-size:12px;padding:3px 8px;border-radius:6px">CAM 04 · LIVE</span></div><div style="padding:10px 14px;display:flex;justify-content:space-between;align-items:center"><span class="b" style="font-size:15px">취식대</span><span class="xs sec" style="display:flex;align-items:center;gap:5px"><span class="dot" style="background:#12A85F;width:7px;height:7px"></span>연결됨 · 1분 전</span></div></div>
+        <div class="card" style="overflow:hidden;display:flex;flex-direction:column;box-shadow:inset 0 0 0 1.5px #FF9C93"><div class="vid" style="flex:1;background:#F3F4F5;color:#868B94;flex-direction:column;gap:6px"><span style="font-size:20px">◌</span>재연결 중 · 마지막 화면 14:20</div><div style="padding:10px 14px;display:flex;justify-content:space-between;align-items:center"><span class="b" style="font-size:15px">창고</span><span class="xs" style="display:flex;align-items:center;gap:5px;color:#D23531;font-weight:600"><span class="dot" style="background:#E01F12;width:7px;height:7px"></span>끊김 11분</span></div></div>
+        <div style="border-radius:12px;border:1.5px dashed #B0B3BA;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;color:#868B94"><span style="font-size:28px;line-height:1">+</span><span class="sm b">카메라 추가</span><span class="xs">3자리 남음</span></div>
+      </div>
+      <div class="xs sec" style="display:flex;gap:20px"><span>오늘 전송 1.8 GB</span><span>대기 0조각</span><span>알림 빠르기 1분</span><span>PC 재부팅 시 자동 시작 ✓</span></div>
+    </div>
+    <div class="card" style="display:flex;flex-direction:column;overflow:hidden">
+      <div style="padding:20px 20px 12px;display:flex;justify-content:space-between;align-items:center"><span style="font-size:20px;font-weight:600">오늘 위험 신호</span><span class="tag" style="background:#FFF1F0;color:#D23531">미확인 2</span></div>
+      <div style="padding:0 20px 12px;display:inline-flex;gap:6px"><span class="tag" style="background:#14233D;color:#fff">전체 4</span><span class="tag" style="box-shadow:inset 0 0 0 1px #DCDEE3;color:#555D6D">미확인</span><span class="tag" style="box-shadow:inset 0 0 0 1px #DCDEE3;color:#555D6D">높음만</span></div>
+      <div style="display:flex;flex-direction:column;gap:8px;padding:0 12px;flex:1">
+        <div style="border-radius:12px;padding:12px;display:flex;gap:12px;box-shadow:inset 0 0 0 1.5px #E01F12;background:#FFF1F0"><div class="vid" style="width:96px;height:60px;border-radius:8px;flex:none"></div><div style="min-width:0"><div style="display:flex;gap:6px;align-items:center"><span class="b" style="font-size:15px">절도 의심</span><span class="tag" style="background:#E01F12;color:#fff;padding:2px 8px;font-size:11px">높음</span></div><div class="xs sec" style="margin-top:2px">계산대 · 14:32 · 미확인</div><div class="xs" style="margin-top:4px;color:#555D6D">결제 없이 상품을 가방에 넣음</div></div></div>
+        <div style="border-radius:12px;padding:12px;display:flex;gap:12px;box-shadow:inset 0 0 0 1px #DCDEE3"><div class="vid" style="width:96px;height:60px;border-radius:8px;flex:none"></div><div><div style="display:flex;gap:6px;align-items:center"><span class="b" style="font-size:15px">장시간 배회</span><span class="tag" style="background:#FFF6E0;color:#B86A00;padding:2px 8px;font-size:11px">보통</span></div><div class="xs sec" style="margin-top:2px">출입문 · 13:05 · 미확인</div></div></div>
+        <div style="border-radius:12px;padding:12px;display:flex;gap:12px;opacity:.6"><div class="vid" style="width:96px;height:60px;border-radius:8px;flex:none"></div><div><div class="b" style="font-size:15px">취식 후 미결제</div><div class="xs sec" style="margin-top:2px">취식대 · 11:40 · 확인됨</div></div></div>
+        <div style="border-radius:12px;padding:12px;display:flex;gap:12px;opacity:.6"><div class="vid" style="width:96px;height:60px;border-radius:8px;flex:none"></div><div><div class="b" style="font-size:15px;text-decoration:line-through;color:#868B94">쓰러짐 의심</div><div class="xs sec" style="margin-top:2px">진열대 A · 09:12 · 오탐 처리</div></div></div>
+      </div>
+      <div style="padding:16px 20px;border-top:1px solid #EEEFF1;text-align:center;color:#3B6FF5;font-size:15px;font-weight:600">전체 기록 보기 →</div>
+    </div>
+  </div>
+</div></div>
+
+<!-- 2d -->
+<div style="display:flex;flex-direction:column;gap:10px"><div class="lbl"><span class="id">2d</span>위험 감지 순간 — 최상위 팝업 (자동 재생 · 소리)</div>
+<div class="scr" style="height:900px;position:relative">
+  <div style="position:absolute;inset:0;background:#F7F8F9;opacity:.5"><div class="nav"></div></div>
+  <div style="position:absolute;inset:0;background:rgba(20,35,61,.45);display:flex;align-items:center;justify-content:center">
+    <div style="width:1080px;background:#FEFEFE;border-radius:16px;box-shadow:0 12px 40px rgba(20,35,61,.16),0 0 0 3px #E01F12;overflow:hidden;display:flex;flex-direction:column">
+      <div style="background:#E01F12;color:#fff;padding:16px 24px;display:flex;align-items:center;gap:16px"><span style="font-size:22px;font-weight:600">⚠ 위험 감지 — 절도 의심</span><span style="font-size:15px;opacity:.9">계산대 · 오늘 14:32:10 · 위험도 높음</span><span style="margin-left:auto;font-size:13px;opacity:.9">모바일 앱에도 푸시 전송됨 ✓</span><span style="width:32px;height:32px;border-radius:8px;background:rgba(255,255,255,.18);display:inline-flex;align-items:center;justify-content:center;font-size:16px">✕</span></div>
+      <div style="display:grid;grid-template-columns:1fr 320px">
+        <div style="padding:24px;display:flex;flex-direction:column;gap:14px;border-right:1px solid #EEEFF1">
+          <div class="vid" style="aspect-ratio:16/9;border-radius:12px"><span style="position:absolute;left:12px;top:12px;background:#E01F12;color:#fff;font-size:12px;padding:4px 10px;border-radius:6px;font-weight:600">위험 구간 · 반복 재생</span><span style="position:absolute;left:38%;top:22%;width:14%;height:52%;border:2px solid #F9A403;border-radius:4px"></span><span style="position:absolute;left:12px;right:12px;bottom:12px;height:40px;border-radius:8px;background:rgba(0,0,0,.55);display:flex;align-items:center;gap:12px;padding:0 14px;color:#fff;font-size:13px">▶ <span>14:32:10</span><span style="flex:1;height:4px;border-radius:2px;background:rgba(255,255,255,.3);position:relative"><span style="position:absolute;left:38%;width:18%;top:0;bottom:0;background:#E01F12;border-radius:2px"></span></span><span>0.5× · <b>1×</b> · 2×</span><span>⛶</span></span></div>
+          <div style="display:flex;justify-content:space-between;align-items:center" class="sm sec"><span>◂ 이전 1분 조각</span><span style="color:#1A1C20">이 조각 안 위험 구간 <b>14:32:10 – 14:32:41</b> (31초)</span><span>다음 1분 조각 ▸</span></div>
+          <div style="border-radius:12px;background:#F3F4F5;padding:14px 16px;font-size:14px;line-height:1.55"><b>AI 설명</b> · 남성 1명(검은 상의·회색 모자)이 진열대에서 상품 2개를 가방에 넣고 결제 없이 출입문 방향으로 이동. 같은 시각 출입문 카메라에서 퇴장 확인 (14:32:38).</div>
+        </div>
+        <div style="padding:24px;display:flex;flex-direction:column;gap:10px">
+          <div class="bd" style="padding:14px;font-size:17px;border-radius:12px">📞 112 신고 안내문</div>
+          <div class="xs sec" style="text-align:center;margin-top:-4px">주소·시각·인상착의·클립 링크가 한 장으로 정리됩니다</div>
+          <div class="bs">클립 저장 · 공유</div>
+          <div class="bs">전후 영상 더 보기</div>
+          <div class="bs">같은 시각 다른 카메라 (출입문)</div>
+          <div style="height:1px;background:#EEEFF1;margin:6px 0"></div>
+          <div class="bs" style="color:#868B94">문제 없음 (오탐) — AI에 알려주기</div>
+          <div class="bp" style="border-radius:8px;padding:12px">확인했어요</div>
+          <div class="xs sec" style="margin-top:auto;line-height:1.5">확인하지 않으면 5분 후 모바일에 1회 재알림 · ✕ 닫기 = 미확인 유지</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div></div>
+
+<!-- 2e -->
+<div style="display:flex;flex-direction:column;gap:10px"><div class="lbl"><span class="id">2e</span>위험 기록 — 타임라인 + 목록</div>
+<div class="scr" style="height:900px">
+  <div class="nav"><div style="display:flex;align-items:center;gap:48px"><div style="display:flex;align-items:center;gap:10px"><img src="ds/assets/logo-mark-navy.svg" style="width:30px;height:27px" alt=""><span style="font-family:Prompt,sans-serif;font-weight:700;font-size:22px;color:#14233D;line-height:1">Scene Stealer</span></div><div class="m"><span>실시간</span><span class="on" style="display:flex;align-items:center;gap:6px">위험 기록<span style="background:#E01F12;color:#fff;border-radius:99px;font-size:12px;padding:1px 7px">2</span></span><span>카메라</span><span>설정</span></div></div><div style="display:flex;align-items:center;gap:24px"><span class="tag" style="background:#E5F0FF;color:#3B6FF5;padding:8px 22px;font-size:16px">강남 1호점 ▾</span><span style="display:flex;align-items:center;gap:6px;font-size:18px;font-weight:600"><img src="ds/assets/icon-user-dark.svg" style="width:18px;height:22px" alt="">홍길동님</span><span style="font-size:18px;font-weight:600">로그아웃</span></div></div>
+  <div style="padding:28px 40px 32px;display:flex;flex-direction:column;gap:16px;flex:1;min-height:0">
+    <div style="display:flex;justify-content:space-between;align-items:flex-end"><div><div style="font-size:32px;font-weight:600">위험 기록</div><div class="sm sec" style="margin-top:4px">클립은 30일, 원본 조각은 서버에 7일 보관됩니다.</div></div><div style="display:flex;gap:8px"><span class="bs">◂ &nbsp;2026. 09. 16 (수)&nbsp; ▸</span><span class="bs">기간: 오늘 ▾</span><span class="bs">카메라: 전체 ▾</span><span class="bs">종류: 전체 ▾</span><span class="bs">상태: 전체 ▾</span></div></div>
+    <div class="card" style="padding:16px 24px;display:flex;flex-direction:column;gap:8px">
+      <div style="display:flex;justify-content:space-between" class="xs sec"><span>하루 타임라인 · 막대를 누르면 클립</span><span style="display:flex;gap:14px"><span style="color:#D23531">■ 높음</span><span style="color:#B86A00">■ 보통</span><span>■ 오탐</span><span>┈ 영상 없음</span></span></div>
+      <div style="display:grid;grid-template-columns:80px 1fr;row-gap:8px;align-items:center;font-size:13px;font-weight:600">
+        <span>계산대</span><div style="height:14px;background:#F3F4F5;border-radius:4px;position:relative"><div style="position:absolute;left:60.7%;width:.9%;top:0;bottom:0;background:#E01F12;border-radius:2px"></div></div>
+        <span>출입문</span><div style="height:14px;background:#F3F4F5;border-radius:4px;position:relative"><div style="position:absolute;left:54%;width:1.4%;top:0;bottom:0;background:#F9A403;border-radius:2px"></div><div style="position:absolute;left:9%;width:.7%;top:0;bottom:0;background:#F9A403;border-radius:2px"></div></div>
+        <span>진열대 A</span><div style="height:14px;background:#F3F4F5;border-radius:4px;position:relative"><div style="position:absolute;left:38%;width:.8%;top:0;bottom:0;background:#B0B3BA;border-radius:2px"></div></div>
+        <span>취식대</span><div style="height:14px;background:#F3F4F5;border-radius:4px;position:relative"><div style="position:absolute;left:48.6%;width:1%;top:0;bottom:0;background:#F9A403;border-radius:2px"></div></div>
+        <span>창고</span><div style="height:14px;background:#F3F4F5;border-radius:4px;position:relative"><div style="position:absolute;left:59%;right:0;top:0;bottom:0;background:repeating-linear-gradient(90deg,#DCDEE3 0 4px,transparent 4px 8px)"></div></div>
+        <span></span><div style="display:flex;justify-content:space-between;color:#868B94;font-weight:400"><span>00</span><span>06</span><span>12</span><span>18</span><span>24</span></div>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 340px;gap:16px;flex:1;min-height:0">
+      <div class="card" style="overflow:hidden;display:flex;flex-direction:column;min-height:0">
+        <div style="display:grid;grid-template-columns:70px 96px 1fr 110px 80px 90px;gap:12px;padding:12px 20px;border-bottom:1px solid #EEEFF1;font-size:13px;color:#868B94;font-weight:600"><span>시각</span><span>클립</span><span>내용</span><span>카메라</span><span>위험도</span><span>상태</span></div>
+        <div style="display:grid;grid-template-columns:70px 96px 1fr 110px 80px 90px;gap:12px;padding:10px 20px;border-bottom:1px solid #EEEFF1;align-items:center;background:#E5F0FF;font-size:15px"><span class="b">14:32</span><div class="vid" style="height:54px;border-radius:6px"></div><span><b>절도 의심</b> <span class="sm sec">· 상품을 가방에 넣고 미결제 퇴장</span></span><span>계산대</span><span class="tag" style="background:#E01F12;color:#fff;padding:2px 10px;font-size:12px;justify-self:start">높음</span><span class="tag" style="background:#FFF1F0;color:#D23531;padding:2px 10px;font-size:12px;justify-self:start">미확인</span></div>
+        <div style="display:grid;grid-template-columns:70px 96px 1fr 110px 80px 90px;gap:12px;padding:10px 20px;border-bottom:1px solid #EEEFF1;align-items:center;font-size:15px"><span class="b">13:05</span><div class="vid" style="height:54px;border-radius:6px"></div><span><b>장시간 배회</b> <span class="sm sec">· 12분간 출입구 근처 서성임</span></span><span>출입문</span><span class="tag" style="background:#FFF6E0;color:#B86A00;padding:2px 10px;font-size:12px;justify-self:start">보통</span><span class="tag" style="background:#FFF1F0;color:#D23531;padding:2px 10px;font-size:12px;justify-self:start">미확인</span></div>
+        <div style="display:grid;grid-template-columns:70px 96px 1fr 110px 80px 90px;gap:12px;padding:10px 20px;border-bottom:1px solid #EEEFF1;align-items:center;font-size:15px;color:#555D6D"><span class="b">11:40</span><div class="vid" style="height:54px;border-radius:6px"></div><span><b>취식 후 미결제</b></span><span>취식대</span><span class="tag" style="background:#FFF6E0;color:#B86A00;padding:2px 10px;font-size:12px;justify-self:start">보통</span><span class="tag" style="background:#EEFBF3;color:#0D8A4E;padding:2px 10px;font-size:12px;justify-self:start">확인됨</span></div>
+        <div style="display:grid;grid-template-columns:70px 96px 1fr 110px 80px 90px;gap:12px;padding:10px 20px;border-bottom:1px solid #EEEFF1;align-items:center;font-size:15px;color:#868B94"><span class="b">09:12</span><div class="vid" style="height:54px;border-radius:6px;opacity:.5"></div><span style="text-decoration:line-through">쓰러짐 의심</span><span>진열대 A</span><span>—</span><span class="tag" style="background:#F3F4F5;color:#868B94;padding:2px 10px;font-size:12px;justify-self:start">오탐</span></div>
+        <div style="display:grid;grid-template-columns:70px 96px 1fr 110px 80px 90px;gap:12px;padding:10px 20px;align-items:center;font-size:15px;color:#555D6D"><span class="b">02:10</span><div class="vid" style="height:54px;border-radius:6px"></div><span><b>노숙 · 취침</b> <span class="sm sec">· 심야 취식대에서 40분 취침</span></span><span>출입문</span><span class="tag" style="background:#FFF6E0;color:#B86A00;padding:2px 10px;font-size:12px;justify-self:start">보통</span><span class="tag" style="background:#EEFBF3;color:#0D8A4E;padding:2px 10px;font-size:12px;justify-self:start">확인됨</span></div>
+        <div style="margin-top:auto;padding:14px 20px;border-top:1px solid #EEEFF1;display:flex;justify-content:space-between;align-items:center"><span class="xs sec">이번 주 · 위험 12건 · 오탐 3건 · 신고 1건</span><div style="display:flex;gap:6px"><span style="width:32px;height:32px;border-radius:8px;box-shadow:inset 0 0 0 1px #DCDEE3;display:inline-flex;align-items:center;justify-content:center;color:#868B94">‹</span><span style="width:32px;height:32px;border-radius:8px;background:#3B6FF5;color:#fff;display:inline-flex;align-items:center;justify-content:center;font-weight:600;font-size:14px">1</span><span style="width:32px;height:32px;border-radius:8px;box-shadow:inset 0 0 0 1px #DCDEE3;display:inline-flex;align-items:center;justify-content:center;color:#868B94;font-size:14px">2</span><span style="width:32px;height:32px;border-radius:8px;box-shadow:inset 0 0 0 1px #DCDEE3;display:inline-flex;align-items:center;justify-content:center;color:#868B94">›</span></div></div>
+      </div>
+      <div class="card" style="padding:16px;display:flex;flex-direction:column;gap:12px">
+        <div class="vid" style="aspect-ratio:16/9;border-radius:10px">선택한 클립 미리보기</div>
+        <div><div style="display:flex;gap:8px;align-items:center"><span style="font-size:18px;font-weight:600">절도 의심</span><span class="tag" style="background:#E01F12;color:#fff;padding:2px 10px;font-size:12px">높음</span></div><div class="sm sec" style="margin-top:2px">계산대 · 09.16 14:32:10 – 14:32:41</div></div>
+        <div class="ba" style="width:100%;box-sizing:border-box">전후 영상 · 자세히 →</div>
+        <div class="bs">클립 저장 · 공유</div>
+        <div style="display:flex;gap:8px"><span class="bs" style="flex:1;color:#868B94">오탐</span><span class="bp" style="flex:2;border-radius:8px;padding:10px">확인</span></div>
+        <div style="border-radius:12px;box-shadow:inset 0 0 0 1px #DCDEE3;padding:12px 14px;font-size:14px;color:#868B94;min-height:64px">메모 (예: 112 접수번호 …)</div>
+      </div>
+    </div>
+  </div>
+</div></div>
+
+<!-- 2f -->
+<div style="display:flex;flex-direction:column;gap:10px"><div class="lbl"><span class="id">2f</span>클립 상세 — 전후 탐색 · 동시각 카메라 · 증거 내보내기</div>
+<div class="scr" style="height:900px">
+  <div class="nav"><div style="display:flex;align-items:center;gap:48px"><div style="display:flex;align-items:center;gap:10px"><img src="ds/assets/logo-mark-navy.svg" style="width:30px;height:27px" alt=""><span style="font-family:Prompt,sans-serif;font-weight:700;font-size:22px;color:#14233D;line-height:1">Scene Stealer</span></div><div class="m"><span>실시간</span><span class="on">위험 기록</span><span>카메라</span><span>설정</span></div></div><div style="display:flex;align-items:center;gap:24px"><span class="tag" style="background:#E5F0FF;color:#3B6FF5;padding:8px 22px;font-size:16px">강남 1호점 ▾</span><span style="display:flex;align-items:center;gap:6px;font-size:18px;font-weight:600"><img src="ds/assets/icon-user-dark.svg" style="width:18px;height:22px" alt="">홍길동님</span><span style="font-size:18px;font-weight:600">로그아웃</span></div></div>
+  <div style="padding:24px 40px 32px;display:flex;flex-direction:column;gap:16px;flex:1;min-height:0">
+    <div style="display:flex;align-items:center;gap:16px"><span style="font-size:22px;color:#555D6D">‹</span><span style="font-size:24px;font-weight:600">절도 의심 · 계산대</span><span class="tag" style="background:#E01F12;color:#fff">높음</span><span class="sm sec">2026. 09. 16 14:32:10 – 14:32:41 (31초)</span><div style="margin-left:auto;display:flex;gap:8px"><span class="bs">◂ 이전 사건</span><span class="bs">다음 사건 ▸</span></div></div>
+    <div style="display:grid;grid-template-columns:1fr 360px;gap:16px;flex:1;min-height:0">
+      <div style="display:flex;flex-direction:column;gap:12px;min-width:0">
+        <div class="card" style="padding:16px;display:flex;flex-direction:column;gap:12px">
+          <div class="vid" style="height:300px;border-radius:12px"><span style="position:absolute;left:12px;top:12px;background:rgba(0,0,0,.55);color:#fff;font-size:12px;padding:4px 8px;border-radius:6px">CAM 01 계산대 · 2026-09-16 14:31:52</span><span style="position:absolute;left:12px;right:12px;bottom:12px;height:40px;border-radius:8px;background:rgba(0,0,0,.55);display:flex;align-items:center;gap:14px;padding:0 14px;color:#fff;font-size:13px">▶ <span>|◂ ◂ ▸ ▸|</span><span>14:31:52</span><span style="flex:1"></span><span>1×</span><span>📷 스냅샷</span><span>⛶</span></span></div>
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <div style="display:flex;justify-content:space-between" class="xs sec"><span>14:25</span><span>14:30</span><span>14:35</span><span>14:40</span></div>
+            <div style="height:36px;border-radius:8px;background:#F3F4F5;display:flex;position:relative;overflow:hidden">
+              <div style="flex:1;border-right:1px dashed #DCDEE3;display:flex;align-items:center;justify-content:center;font-size:12px;color:#868B94">조각 #1282</div><div style="flex:1;border-right:1px dashed #DCDEE3;display:flex;align-items:center;justify-content:center;font-size:12px;color:#868B94">#1283</div><div style="flex:1;border-right:1px dashed #DCDEE3;display:flex;align-items:center;justify-content:center;font-size:12px;color:#868B94;position:relative">#1284<div style="position:absolute;left:38%;width:18%;top:6px;bottom:6px;background:#E01F12;border-radius:4px;opacity:.85"></div></div><div style="flex:1;display:flex;align-items:center;justify-content:center;font-size:12px;color:#868B94">#1285</div>
+              <div style="position:absolute;left:58%;top:0;bottom:0;width:2px;background:#14233D"></div>
+            </div>
+            <div style="display:flex;justify-content:space-between" class="xs sec"><span style="color:#3B6FF5;font-weight:600">◂ 더 이전 (7일 내)</span><span>빨간 구간 = AI 위험 판정 · 드래그로 내보낼 범위 선택</span><span style="color:#3B6FF5;font-weight:600">더 이후 ▸</span></div>
+          </div>
+        </div>
+        <div class="card" style="padding:16px;display:flex;flex-direction:column;gap:10px;flex:1;min-height:0;overflow:hidden">
+          <div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:18px;font-weight:600">같은 시각 다른 카메라</span><span class="xs sec">모든 카메라가 같은 시각에 잘리므로 동기 재생 · 누르면 메인과 교체</span></div>
+          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px">
+            <div style="border-radius:10px;overflow:hidden;box-shadow:inset 0 0 0 1.5px #E01F12"><div class="vid" style="height:110px">출입문 14:31:52</div><div style="padding:8px 10px;font-size:13px"><b>출입문</b> <span style="color:#D23531;font-weight:600">· 퇴장 14:32:38</span></div></div>
+            <div style="border-radius:10px;overflow:hidden;box-shadow:inset 0 0 0 1px #DCDEE3"><div class="vid" style="height:110px">진열대 A</div><div style="padding:8px 10px;font-size:13px"><b>진열대 A</b></div></div>
+            <div style="border-radius:10px;overflow:hidden;box-shadow:inset 0 0 0 1px #DCDEE3"><div class="vid" style="height:110px">취식대</div><div style="padding:8px 10px;font-size:13px"><b>취식대</b></div></div>
+            <div style="border-radius:10px;overflow:hidden;box-shadow:inset 0 0 0 1px #DCDEE3;opacity:.55"><div class="vid" style="height:110px;background:#F3F4F5;color:#868B94">영상 없음</div><div style="padding:8px 10px;font-size:13px"><b>창고</b> · 끊김</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="card" style="padding:20px;display:flex;flex-direction:column;gap:12px">
+        <div style="border-radius:12px;background:#F3F4F5;padding:14px 16px;font-size:14px;line-height:1.55"><b>AI 설명</b><div style="margin-top:4px;color:#555D6D">남성 1명, 검은 상의·회색 모자. 진열대에서 상품 2개를 가방에 넣음 (14:32:10). 계산대 미접근. 출입문 퇴장 (14:32:38).</div><div class="xs sec" style="margin-top:6px">인상착의는 신고 안내문에 자동 포함</div></div>
+        <div style="display:flex;flex-direction:column;gap:6px"><span class="sm b">상태</span><div style="display:inline-flex;background:#F3F4F5;border-radius:8px;padding:4px;gap:2px"><span style="flex:1;text-align:center;padding:8px;font-size:14px;color:#868B94">미확인</span><span style="flex:1;text-align:center;background:#FEFEFE;border-radius:6px;padding:8px;font-size:14px;font-weight:600;box-shadow:0 1px 2px rgba(0,0,0,.06)">확인</span><span style="flex:1;text-align:center;padding:8px;font-size:14px;color:#868B94">오탐</span></div></div>
+        <div style="display:flex;flex-direction:column;gap:6px"><span class="sm b">메모</span><div style="border-radius:12px;box-shadow:inset 0 0 0 1px #B0B3BA;padding:12px 14px;font-size:14px;color:#868B94;min-height:64px">112 접수번호, 피해 금액 등</div></div>
+        <div style="height:1px;background:#EEEFF1;margin:4px 0"></div>
+        <div class="bp" style="border-radius:8px;padding:12px">증거 묶음 내보내기</div>
+        <div class="xs sec" style="margin-top:-6px;line-height:1.5">선택 범위 영상(카메라별) + 시각·매장 정보·AI 설명 PDF 1장 → 경찰 제출용 폴더</div>
+        <div class="bs">클립만 저장 · 공유 링크 (7일)</div>
+        <div class="bd" style="background:#FEFEFE;color:#D23531;box-shadow:inset 0 0 0 1px #FF9C93">112 신고 안내문 복사</div>
+      </div>
+    </div>
+  </div>
+</div></div>
+
+<!-- 2g -->
+<div style="display:flex;flex-direction:column;gap:10px"><div class="lbl"><span class="id">2g</span>설정 — 알림 · 운영시간 · 모바일 연결 · 고급</div>
+<div class="scr" style="height:900px">
+  <div class="nav"><div style="display:flex;align-items:center;gap:48px"><div style="display:flex;align-items:center;gap:10px"><img src="ds/assets/logo-mark-navy.svg" style="width:30px;height:27px" alt=""><span style="font-family:Prompt,sans-serif;font-weight:700;font-size:22px;color:#14233D;line-height:1">Scene Stealer</span></div><div class="m"><span>실시간</span><span>위험 기록</span><span>카메라</span><span class="on">설정</span></div></div><div style="display:flex;align-items:center;gap:24px"><span class="tag" style="background:#E5F0FF;color:#3B6FF5;padding:8px 22px;font-size:16px">강남 1호점 ▾</span><span style="display:flex;align-items:center;gap:6px;font-size:18px;font-weight:600"><img src="ds/assets/icon-user-dark.svg" style="width:18px;height:22px" alt="">홍길동님</span><span style="font-size:18px;font-weight:600">로그아웃</span></div></div>
+  <div style="padding:28px 40px 32px;display:grid;grid-template-columns:260px 1fr;gap:24px;flex:1;min-height:0">
+    <div style="display:flex;flex-direction:column;gap:4px;font-size:16px;font-weight:600">
+      <div style="font-size:32px;margin-bottom:14px">설정</div>
+      <div style="padding:12px 16px;border-radius:12px;background:#E5F0FF;color:#3B6FF5">알림</div>
+      <div style="padding:12px 16px;border-radius:12px;color:#555D6D">매장 운영 시간</div>
+      <div style="padding:12px 16px;border-radius:12px;color:#555D6D">모바일 앱 연결</div>
+      <div style="padding:12px 16px;border-radius:12px;color:#555D6D">카메라 관리 (5/8)</div>
+      <div style="padding:12px 16px;border-radius:12px;color:#555D6D">저장 공간 · 인터넷</div>
+      <div style="padding:12px 16px;border-radius:12px;color:#555D6D">매장 정보 (주소 — 신고용)</div>
+      <div style="padding:12px 16px;border-radius:12px;color:#868B94;margin-top:auto;font-size:14px">고급 (서버 주소 · 토큰 · 기기 ID)</div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:16px;min-height:0">
+      <div class="card" style="overflow:hidden">
+        <div style="padding:16px 24px 8px;display:flex;justify-content:space-between;align-items:center"><span style="font-size:20px;font-weight:600">어떤 위험을 알려드릴까요</span><span class="xs sec">변경은 즉시 저장됩니다</span></div>
+        <div style="display:grid;grid-template-columns:1fr 120px 240px;gap:12px;padding:10px 24px;border-bottom:1px solid #EEEFF1;font-size:13px;color:#868B94;font-weight:600"><span>위험 종류</span><span>알림</span><span>민감도</span></div>
+        <div style="display:grid;grid-template-columns:1fr 120px 240px;gap:12px;padding:8px 24px;border-bottom:1px solid #EEEFF1;align-items:center;font-size:15px"><span class="b">절도 (미결제 반출)</span><span style="width:44px;height:24px;border-radius:99px;background:#3B6FF5;position:relative;display:inline-block"><span style="position:absolute;right:2px;top:2px;width:20px;height:20px;border-radius:50%;background:#fff"></span></span><div style="display:inline-flex;background:#F3F4F5;border-radius:8px;padding:3px;gap:2px"><span style="flex:1;text-align:center;padding:5px 10px;font-size:13px;color:#868B94">낮음</span><span style="flex:1;text-align:center;background:#FEFEFE;border-radius:6px;padding:5px 10px;font-size:13px;font-weight:600;box-shadow:0 1px 2px rgba(0,0,0,.06)">보통</span><span style="flex:1;text-align:center;padding:5px 10px;font-size:13px;color:#868B94">높음</span></div></div>
+        <div style="display:grid;grid-template-columns:1fr 120px 240px;gap:12px;padding:8px 24px;border-bottom:1px solid #EEEFF1;align-items:center;font-size:15px"><span class="b">기물 파손 · 폭력</span><span style="width:44px;height:24px;border-radius:99px;background:#3B6FF5;position:relative;display:inline-block"><span style="position:absolute;right:2px;top:2px;width:20px;height:20px;border-radius:50%;background:#fff"></span></span><div style="display:inline-flex;background:#F3F4F5;border-radius:8px;padding:3px;gap:2px"><span style="flex:1;text-align:center;padding:5px 10px;font-size:13px;color:#868B94">낮음</span><span style="flex:1;text-align:center;padding:5px 10px;font-size:13px;color:#868B94">보통</span><span style="flex:1;text-align:center;background:#FEFEFE;border-radius:6px;padding:5px 10px;font-size:13px;font-weight:600;box-shadow:0 1px 2px rgba(0,0,0,.06)">높음</span></div></div>
+        <div style="display:grid;grid-template-columns:1fr 120px 240px;gap:12px;padding:8px 24px;border-bottom:1px solid #EEEFF1;align-items:center;font-size:15px"><span class="b">취식 후 미결제</span><span style="width:44px;height:24px;border-radius:99px;background:#3B6FF5;position:relative;display:inline-block"><span style="position:absolute;right:2px;top:2px;width:20px;height:20px;border-radius:50%;background:#fff"></span></span><div style="display:inline-flex;background:#F3F4F5;border-radius:8px;padding:3px;gap:2px"><span style="flex:1;text-align:center;padding:5px 10px;font-size:13px;color:#868B94">낮음</span><span style="flex:1;text-align:center;background:#FEFEFE;border-radius:6px;padding:5px 10px;font-size:13px;font-weight:600;box-shadow:0 1px 2px rgba(0,0,0,.06)">보통</span><span style="flex:1;text-align:center;padding:5px 10px;font-size:13px;color:#868B94">높음</span></div></div>
+        <div style="display:grid;grid-template-columns:1fr 120px 240px;gap:12px;padding:8px 24px;border-bottom:1px solid #EEEFF1;align-items:center;font-size:15px"><span class="b">미성년자 주류 · 담배</span><span style="width:44px;height:24px;border-radius:99px;background:#3B6FF5;position:relative;display:inline-block"><span style="position:absolute;right:2px;top:2px;width:20px;height:20px;border-radius:50%;background:#fff"></span></span><div style="display:inline-flex;background:#F3F4F5;border-radius:8px;padding:3px;gap:2px"><span style="flex:1;text-align:center;padding:5px 10px;font-size:13px;color:#868B94">낮음</span><span style="flex:1;text-align:center;background:#FEFEFE;border-radius:6px;padding:5px 10px;font-size:13px;font-weight:600;box-shadow:0 1px 2px rgba(0,0,0,.06)">보통</span><span style="flex:1;text-align:center;padding:5px 10px;font-size:13px;color:#868B94">높음</span></div></div>
+        <div style="display:grid;grid-template-columns:1fr 120px 240px;gap:12px;padding:8px 24px;border-bottom:1px solid #EEEFF1;align-items:center;font-size:15px"><span class="b">장시간 배회 <span class="xs sec" style="font-weight:400">10분 이상</span></span><span style="width:44px;height:24px;border-radius:99px;background:#3B6FF5;position:relative;display:inline-block"><span style="position:absolute;right:2px;top:2px;width:20px;height:20px;border-radius:50%;background:#fff"></span></span><div style="display:inline-flex;background:#F3F4F5;border-radius:8px;padding:3px;gap:2px"><span style="flex:1;text-align:center;background:#FEFEFE;border-radius:6px;padding:5px 10px;font-size:13px;font-weight:600;box-shadow:0 1px 2px rgba(0,0,0,.06)">낮음</span><span style="flex:1;text-align:center;padding:5px 10px;font-size:13px;color:#868B94">보통</span><span style="flex:1;text-align:center;padding:5px 10px;font-size:13px;color:#868B94">높음</span></div></div>
+        <div style="display:grid;grid-template-columns:1fr 120px 240px;gap:12px;padding:8px 24px;border-bottom:1px solid #EEEFF1;align-items:center;font-size:15px"><span class="b">노숙 · 취침 <span class="xs sec" style="font-weight:400">심야만</span></span><span style="width:44px;height:24px;border-radius:99px;background:#DCDEE3;position:relative;display:inline-block"><span style="position:absolute;left:2px;top:2px;width:20px;height:20px;border-radius:50%;background:#fff"></span></span><div style="display:inline-flex;background:#F3F4F5;border-radius:8px;padding:3px;gap:2px;opacity:.5"><span style="flex:1;text-align:center;padding:5px 10px;font-size:13px;color:#868B94">낮음</span><span style="flex:1;text-align:center;background:#FEFEFE;border-radius:6px;padding:5px 10px;font-size:13px;font-weight:600">보통</span><span style="flex:1;text-align:center;padding:5px 10px;font-size:13px;color:#868B94">높음</span></div></div>
+        <div style="display:grid;grid-template-columns:1fr 120px 240px;gap:12px;padding:8px 24px;align-items:center;font-size:15px"><span class="b">쓰러짐 (응급) <span class="xs" style="font-weight:600;color:#D23531">항상 최우선 · 끌 수 없음</span></span><span style="width:44px;height:24px;border-radius:99px;background:#B0B3BA;position:relative;display:inline-block"><span style="position:absolute;right:2px;top:2px;width:20px;height:20px;border-radius:50%;background:#fff"></span></span><span class="sm sec">—</span></div>
+      </div>
+      <div class="card" style="overflow:hidden">
+        <div style="padding:16px 24px 8px;font-size:20px;font-weight:600">알림 방식</div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 24px;border-bottom:1px solid #EEEFF1;font-size:15px"><span class="b">PC 팝업 + 소리</span><span style="width:44px;height:24px;border-radius:99px;background:#3B6FF5;position:relative;display:inline-block"><span style="position:absolute;right:2px;top:2px;width:20px;height:20px;border-radius:50%;background:#fff"></span></span></div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 24px;border-bottom:1px solid #EEEFF1;font-size:15px"><span class="b">모바일 푸시</span><span class="sm sec">켬 · iPhone 연결됨</span></div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 24px;border-bottom:1px solid #EEEFF1;font-size:15px"><span><span class="b">영업 시간엔 알림 줄이기</span> <span class="xs sec">사장님이 매장에 있을 때</span></span><span class="sm sec">'높음'만 · 09:00 – 21:00</span></div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 24px;border-bottom:1px solid #EEEFF1;font-size:15px"><span><span class="b">수면 시간</span> <span class="xs sec">응급·높음만 소리로</span></span><span class="sm sec">01:00 – 07:00</span></div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 24px;font-size:15px"><span class="b">테스트 알림 보내기</span><span class="bs" style="padding:8px 16px;font-size:14px">지금 보내기</span></div>
+      </div>
+    </div>
+  </div>
+</div></div>
+
+</div>
+</x-dc>
+</body>
+</html>

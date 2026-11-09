@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>씬스틸러 — 무인매장 이상행동 감시</title>
+    <meta name="description" content="CCTV 영상을 잘라 AI 가 이상 행동을 찾아내고, 사장님 휴대폰으로 알립니다." />
+
+    <!-- 카톡·슬랙 등에 링크를 공유했을 때 뜨는 미리보기. 이미지는 build-all.mjs 가 dist 루트에 복사한다. -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="씬스틸러 — 무인매장 이상행동 감시" />
+    <meta property="og:description" content="CCTV 영상을 잘라 AI 가 이상 행동을 찾아내고, 사장님 휴대폰으로 알립니다." />
+    <meta property="og:image" content="https://scene-stealer.site/og-image.jpg" />
+    <meta property="og:url" content="https://scene-stealer.site/" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="stylesheet" href="./src/styles.css" />
+  </head>
+  <body>
+    <!-- 매장 PC 수집기. 들어오자마자 로그인된 채로 감시가 돌고 있다. -->
+    <div class="stage" id="stage">
+      <iframe id="pc" title="매장 PC 수집기" src="./pc/?demo=1"></iframe>
+    </div>
+
+    <!-- 휴대폰으로 알림을 받아 보려는 사람만 펼친다. 기본은 접혀 있다. -->
+    <aside class="phone" id="phone">
+      <button class="phone-toggle" id="phone-toggle" aria-expanded="false" aria-controls="phone-body">
+        <span class="dot" id="phone-dot"></span>
+        휴대폰으로 알림 받기
+      </button>
+      <div class="phone-body" id="phone-body" hidden>
+        <p>휴대폰 카메라로 찍으면 사장님 앱이 열립니다. 알림을 허용해 두면 위험이 잡힐 때 이 휴대폰으로 갑니다.</p>
+        <div class="qr" id="qr" aria-label="휴대폰으로 앱을 여는 QR 코드"></div>
+        <p class="code">연결 코드 <b id="code">------</b></p>
+        <p class="sub" id="phone-status"></p>
+      </div>
+    </aside>
+
+    <!-- 휴대폰으로 이 주소를 연 사람에게는 데스크톱 앱 화면 대신 앱을 바로 권한다. -->
+    <section class="handoff" id="handoff" hidden>
+      <h1>씬스틸러</h1>
+      <p>
+        이 주소는 <b>매장 PC 에 설치하는 수집기</b> 화면이라 넓은 화면이 필요합니다.
+        휴대폰에서는 <b>사장님 앱</b>을 바로 열어 보세요.
+      </p>
+      <a class="btn primary" id="open-phone" href="#">사장님 앱 열기</a>
+      <p class="sub">전체 흐름(감시 → 위험 감지 → 알림)은 노트북에서 이 주소를 열면 보실 수 있습니다.</p>
+    </section>
+
+    <script type="module" src="./src/main.ts"></script>
+  </body>
+</html>

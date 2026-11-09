@@ -1,0 +1,27 @@
+{
+  "name": "scene-stealer",
+  "private": true,
+  "description": "씬스틸러 — 무인매장 CCTV 위험 감시 (PC 수집 앱 · 모바일 앱)",
+  "packageManager": "npm@10.9.8",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "turbo run build",
+    "typecheck": "turbo run typecheck",
+    "test": "turbo run test",
+    "test:unit": "turbo run test:unit",
+    "test:e2e": "turbo run test:e2e",
+    "dev": "npm run dev -w cctv-agent --",
+    "wanted": "node apps/demo-web/scripts/wanted.mjs",
+    "ui": "npm run ui -w cctv-agent --",
+    "preview": "npm run preview -w cctv-agent --",
+    "fake-camera": "npm run fake-camera -w cctv-agent --",
+    "fake-camera:webcam": "npm run fake-camera:webcam -w cctv-agent --",
+    "dist": "npm run dist -w cctv-agent --"
+  },
+  "devDependencies": {
+    "turbo": "^2.10.13"
+  }
+}

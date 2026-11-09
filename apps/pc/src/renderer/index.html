@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!--
+      img-src / media-src 에 https: 를 연 이유: 썸네일과 위험 클립은 서버가 주는 서명 URL
+      (Supabase Storage) 이고, 매장마다 서버 주소가 달라 출처를 미리 적을 수 없다.
+      connect-src 는 열지 않는다 — fetch 는 여전히 막혀 있고, 서버 호출과 로그인 토큰은
+      메인 프로세스에만 있다 (src/main/services/server-client.ts).
+      http://127.0.0.1:* 는 PC 로컬 실시간 미리보기(MJPEG) 자리이고, 로컬 도커로 띄운 Supabase
+      (scene-stealer-back 의 scripts/local-up.sh, http://127.0.0.1:54321)의 썸네일·클립도 이 출처다.
+    -->
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; img-src 'self' data: http://127.0.0.1:* https:; media-src 'self' blob: http://127.0.0.1:* https:; style-src 'self' 'unsafe-inline'; font-src 'self' data:"
+    />
+    <title>Scene Stealer</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="./main.tsx"></script>
+  </body>
+</html>

@@ -1,0 +1,35 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "ui",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "ui"],
+      "port": 5174
+    },
+    {
+      "name": "mobile-web",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "web", "-w", "scene-stealer-mobile", "--", "--port", "8082"],
+      "port": 8082
+    },
+    {
+      "name": "demo-dist",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "preview", "-w", "@scene-stealer/demo-web", "--", "--port", "4173", "--strictPort"],
+      "port": 4173
+    },
+    {
+      "name": "stub-backend",
+      "runtimeExecutable": "node",
+      "runtimeArgs": ["apps/demo-web/scripts/stub-backend.mjs"],
+      "port": 8787
+    },
+    {
+      "name": "design",
+      "runtimeExecutable": "python",
+      "runtimeArgs": ["-m", "http.server", "5500", "--directory", "design"],
+      "port": 5500
+    }
+  ]
+}

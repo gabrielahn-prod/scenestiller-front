@@ -1,0 +1,16 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "buildCommand": "npm run build -w @scene-stealer/demo-web",
+  "outputDirectory": "apps/demo-web/dist",
+  "framework": null,
+  "redirects": [
+    { "source": "/", "destination": "/wanted-test", "permanent": false }
+  ],
+  "rewrites": [
+    { "source": "/wanted-test", "destination": "/wanted-test/index.html" },
+    { "source": "/wanted-test/pc", "destination": "/wanted-test/pc/index.html" },
+    { "source": "/wanted-test/m", "destination": "/wanted-test/m/index.html" },
+    { "source": "/wanted-test/m/(.*)", "destination": "/wanted-test/m/index.html" },
+    { "source": "/m/(.*)", "destination": "/m/index.html" }
+  ]
+}

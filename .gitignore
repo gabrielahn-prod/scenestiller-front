@@ -1,0 +1,14 @@
+node_modules/
+dist/
+out/
+release/
+.DS_Store
+*.log
+.env
+.env.*
+spool/
+.tmp/
+.turbo/
+
+# Vercel CLI 가 `vercel link` 때 만드는 프로젝트 연결 정보
+.vercel/

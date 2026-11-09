@@ -1,0 +1,57 @@
+/*
+ * 폰트는 CDN 이 아니라 번들이다. 렌더러 CSP 가 default-src 'self' 라 외부
+ * 요청이 막히고, 매장 PC 는 인터넷이 끊겨도 화면이 그대로여야 한다.
+ * (디자인 HTML 은 jsdelivr/Google Fonts 를 쓰지만 같은 서체다.)
+ */
+@import 'pretendard/dist/web/variable/pretendardvariable.css';
+@import '@fontsource/prompt/700.css';
+
+@import './styles/tokens.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html,
+  body,
+  #root {
+    @apply h-full;
+  }
+
+  body {
+    @apply bg-page text-gray-900 antialiased;
+    font-family: 'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont,
+      'Apple SD Gothic Neo', 'Segoe UI', 'Malgun Gothic', sans-serif;
+    /* 디자인시스템 2장 — 전역 자간과 숫자 폭 고정.
+       타임코드(14:32:10)가 1초마다 흔들리지 않게 tabular-nums 를 전역으로 둔다. */
+    letter-spacing: -0.01em;
+    font-variant-numeric: tabular-nums;
+    /* 디자인 PC 화면 HTML 은 line-height 를 주지 않아 Pretendard 의 normal(≈1.19)로 그려진다.
+       Tailwind preflight 의 1.5 를 그대로 두면 모든 줄이 4~5px 씩 높아져, 2e 표 아래
+       요약·페이지 넘김이 900px 창 밖으로 밀렸다. normal 은 대체 서체마다 달라 숫자로 고정한다.
+       여러 줄 문단은 디자인처럼 leading-normal(1.5) · leading-[1.55] 를 따로 준다. */
+    line-height: 1.2;
+  }
+
+  /* 매장 PC 에서 드래그로 텍스트가 잡히는 것은 앱답지 않다. 입력 요소만 허용한다. */
+  * {
+    @apply select-none;
+  }
+
+  input,
+  textarea {
+    @apply select-text;
+  }
+
+  /* 포커스 링은 디자인의 border/focus(blue/600)를 따른다. */
+  :focus-visible {
+    @apply outline-none ring-2 ring-blue-600;
+  }
+
+  /* 글자를 넣는 칸은 디자인의 입력 칸 focus 상태(1px blue/600 테두리)를 스스로 그린다.
+     링까지 그리면 칸 안에 파란 네모가 한 겹 더 생긴다 (2a 휴대폰 번호 칸). */
+  :is(input, textarea, select):focus-visible {
+    @apply ring-0;
+  }
+}

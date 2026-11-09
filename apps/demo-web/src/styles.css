@@ -1,0 +1,202 @@
+/* 색은 PC·모바일 앱과 같은 피그마 토큰에서 가져왔다. 세 화면이 한 제품으로 보여야 한다. */
+:root {
+  --brand: #14233d;
+  --accent: #3b6ff5;
+  --danger: #d23531;
+  --ok: #12a85f;
+  --text: #1a1c20;
+  --text-2: #6b7280;
+  --border: #dcdee3;
+  --surface: #ffffff;
+  --ground: #f4f6fa;
+  color-scheme: light;
+}
+
+* { box-sizing: border-box; }
+
+/* display 를 지정한 요소는 hidden 속성만으로는 안 숨는다. */
+[hidden] { display: none !important; }
+
+html, body {
+  margin: 0;
+  height: 100%;
+  background: var(--ground);
+  color: var(--text);
+  font: 15px/1.6 Pretendard, -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  overflow: hidden;
+}
+
+/*
+ * PC 앱은 데스크톱 창을 전제로 만든 화면이라 좁히면 상단 메뉴가 줄바꿈된다.
+ * 폭을 고정해 렌더하고 창에 맞게 통째로 축소한다 — 심사위원 화면이 넓든 좁든 제 비율로 보인다.
+ */
+.stage {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+}
+
+#pc {
+  border: 0;
+  background: var(--surface);
+  transform-origin: center center;
+  box-shadow: 0 1px 3px rgb(20 35 61 / 0.08);
+}
+
+/* ---------------------------------------------- 휴대폰 연결 (구석에 접혀 있음) */
+
+.phone {
+  position: fixed;
+  right: 18px;
+  bottom: 18px;
+  z-index: 10;
+  width: 268px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  box-shadow: 0 6px 24px rgb(20 35 61 / 0.12);
+  overflow: hidden;
+}
+
+.phone-toggle {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  width: 100%;
+  padding: 13px 16px;
+  border: 0;
+  background: transparent;
+  font: inherit;
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--text);
+  text-align: left;
+  cursor: pointer;
+}
+.phone-toggle:hover { background: #fbfcfe; }
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--border);
+  flex: none;
+}
+.dot.ready { background: var(--ok); }
+
+.phone-body {
+  padding: 0 16px 16px;
+  border-top: 1px solid var(--border);
+}
+.phone-body p { margin: 12px 0 0; font-size: 13px; color: var(--text-2); line-height: 1.5; }
+
+.qr {
+  width: 100%;
+  aspect-ratio: 1;
+  display: grid;
+  place-items: center;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px;
+  margin-top: 12px;
+}
+.qr svg { width: 100%; height: 100%; }
+
+.code { margin: 10px 0 0; font-size: 12.5px; }
+.code b { color: var(--text); letter-spacing: 2px; font-size: 14px; }
+
+.sub { font-size: 12.5px; color: var(--text-2); }
+.sub.ok { color: var(--ok); }
+.sub.warn { color: var(--danger); }
+
+/* ---------------------------------------------- 휴대폰으로 이 주소를 연 경우 */
+
+.handoff {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 14px;
+  padding: 28px;
+  background: var(--brand);
+  color: #fff;
+}
+.handoff h1 { margin: 0; font-size: 22px; }
+.handoff p { margin: 0; font-size: 15px; line-height: 1.6; opacity: 0.88; }
+.handoff b { opacity: 1; }
+.handoff .sub { color: #fff; opacity: 0.6; }
+
+.btn {
+  display: block;
+  width: 100%;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  border-radius: 10px;
+  padding: 14px;
+  font: inherit;
+  font-weight: 600;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+}
+.btn.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+/* ---------------------------------------------- 실서버 시연 (/wanted-test) — 어느 화면을 볼지 고른다 */
+
+/* 로고 하나와 버튼 둘. 작은 화면에서는 세로로 길어지므로 스크롤을 막지 않는다. */
+.chooser {
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  overflow: auto;
+}
+
+.chooser-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 36px;
+  width: min(340px, 100%);
+}
+
+.logo { display: flex; align-items: center; gap: 9px; margin: 0; }
+.logo svg { width: 46px; height: auto; }
+.logo .word {
+  font-family: Prompt, Pretendard, system-ui, sans-serif;
+  font-weight: 700;
+  font-size: 27px;
+  letter-spacing: -0.01em;
+  color: var(--brand);
+}
+
+.choices { display: flex; flex-direction: column; gap: 12px; width: 100%; }
+
+.choice {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 56px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--surface);
+  color: var(--brand);
+  font-size: 16px;
+  font-weight: 600;
+  text-decoration: none;
+  box-shadow: 0 1px 2px rgb(20 35 61 / 0.05);
+  transition: border-color 0.15s, color 0.15s, transform 0.15s;
+}
+.choice:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-1px); }
+.choice:active { transform: none; }
+.choice:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+@media (max-width: 720px) {
+  .phone { display: none; }
+}

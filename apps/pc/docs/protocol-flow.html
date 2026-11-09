@@ -1,0 +1,684 @@
+<title>카메라에서 백엔드까지</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+KR:wght@400;500;600&display=swap">
+
+<style>
+  :root {
+    --ground: #f6f8fa;
+    --surface: #ffffff;
+    --surface-sunk: #eef1f5;
+    --ink: #171c24;
+    --ink-soft: #59636f;
+    --ink-faint: #8b95a1;
+    --line: #dce1e8;
+    --line-strong: #c3cbd5;
+    --control: #1f6f7d;
+    --control-soft: #e0eff1;
+    --data: #b4661d;
+    --data-soft: #f8ecdd;
+    --step: 1.5rem;
+    --measure: 68ch;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground: #11151a;
+      --surface: #181d24;
+      --surface-sunk: #1f252e;
+      --ink: #e6eaef;
+      --ink-soft: #9aa5b1;
+      --ink-faint: #6d7885;
+      --line: #2a323c;
+      --line-strong: #3a434f;
+      --control: #66c2d0;
+      --control-soft: #16323a;
+      --data: #e0a05c;
+      --data-soft: #33251341;
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --ground: #11151a;
+    --surface: #181d24;
+    --surface-sunk: #1f252e;
+    --ink: #e6eaef;
+    --ink-soft: #9aa5b1;
+    --ink-faint: #6d7885;
+    --line: #2a323c;
+    --line-strong: #3a434f;
+    --control: #66c2d0;
+    --control-soft: #16323a;
+    --data: #e0a05c;
+    --data-soft: #33251341;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--ground);
+    color: var(--ink);
+    font-family: "IBM Plex Sans KR", -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", sans-serif;
+    font-size: 16px;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .page {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: clamp(2.5rem, 6vw, 5rem) clamp(1.25rem, 4vw, 3rem) 6rem;
+    display: flex;
+    flex-direction: column;
+    gap: 3.5rem;
+  }
+
+  header { display: flex; flex-direction: column; gap: 0.75rem; }
+
+  .eyebrow {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+
+  h1 {
+    margin: 0;
+    font-size: clamp(1.9rem, 4.5vw, 2.6rem);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    line-height: 1.25;
+    text-wrap: balance;
+  }
+
+  .lede { margin: 0; max-width: var(--measure); color: var(--ink-soft); }
+
+  .legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.25rem;
+    padding-top: 0.5rem;
+    font-size: 0.85rem;
+    color: var(--ink-soft);
+  }
+  .legend span { display: inline-flex; align-items: center; gap: 0.5rem; }
+  .swatch { width: 1.6rem; height: 0.2rem; border-radius: 999px; }
+  .swatch.control { background: var(--control); }
+  .swatch.data { background: var(--data); }
+
+  section { display: flex; flex-direction: column; gap: 1.25rem; }
+
+  .head { display: flex; align-items: baseline; gap: 0.85rem; }
+
+  .num {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--ink-faint);
+    border: 1px solid var(--line-strong);
+    border-radius: 999px;
+    padding: 0.05rem 0.55rem;
+    flex-shrink: 0;
+  }
+
+  h2 {
+    margin: 0;
+    font-size: clamp(1.2rem, 2.6vw, 1.45rem);
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    text-wrap: balance;
+  }
+
+  p { margin: 0; max-width: var(--measure); }
+  p + p { margin-top: 0.75rem; }
+
+  figure {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: clamp(1rem, 3vw, 1.75rem);
+    overflow-x: auto;
+  }
+  figure svg { display: block; width: 100%; min-width: 520px; height: auto; color: var(--ink); }
+  figcaption { font-size: 0.85rem; color: var(--ink-soft); max-width: var(--measure); }
+
+  dl.facts {
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    gap: 0.4rem 1.5rem;
+    margin: 0;
+    padding: 1rem 1.25rem;
+    background: var(--surface-sunk);
+    border-radius: 8px;
+    font-size: 0.9rem;
+  }
+  dl.facts dt {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 0.76rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    padding-top: 0.3rem;
+  }
+  dl.facts dd { margin: 0; }
+
+  code, .mono {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 0.88em;
+  }
+  code {
+    background: var(--surface-sunk);
+    padding: 0.1em 0.35em;
+    border-radius: 4px;
+  }
+
+  .note {
+    border-left: 2px solid var(--data);
+    padding: 0.15rem 0 0.15rem 1rem;
+    color: var(--ink-soft);
+    font-size: 0.94rem;
+    max-width: var(--measure);
+  }
+
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    font-size: 0.9rem;
+  }
+  th, td {
+    text-align: left;
+    padding: 0.6rem 0.9rem;
+    border-bottom: 1px solid var(--line);
+    vertical-align: top;
+  }
+  th {
+    font-size: 0.76rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    font-weight: 500;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+  }
+  .wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); }
+
+  footer {
+    border-top: 1px solid var(--line);
+    padding-top: 1.5rem;
+    font-size: 0.85rem;
+    color: var(--ink-faint);
+    max-width: var(--measure);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    a { transition: color 120ms ease; }
+  }
+</style>
+
+<div class="page">
+
+  <header>
+    <div class="eyebrow">무인매장 CCTV 이상행동 감지 · 수집 에이전트</div>
+    <h1>카메라에서 백엔드까지</h1>
+    <p class="lede">
+      CCTV는 하나의 프로토콜이 아니다. 카메라를 <strong>찾는</strong> 프로토콜, 카메라에게 <strong>묻는</strong>
+      프로토콜, 영상을 <strong>나르는</strong> 프로토콜이 따로 있고 각각 다른 계층에서 논다.
+      이 문서는 수집 에이전트가 그 셋을 어느 순간에 어떻게 쓰는지 보여준다.
+    </p>
+    <div class="legend">
+      <span><i class="swatch control"></i> 제어 — 찾고 묻고 협상한다</span>
+      <span><i class="swatch data"></i> 데이터 — 영상이 실제로 흐른다</span>
+    </div>
+  </header>
+
+  <section>
+    <div class="head"><h2>전체 그림</h2></div>
+    <figure>
+      <svg viewBox="0 0 900 320" role="img" aria-label="카메라는 ONVIF로 자신을 알리고 RTSP로 영상을 내보내며, 에이전트가 이를 조각내 HTTPS로 백엔드에 올린다">
+        <defs>
+          <marker id="a-ink" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <polygon points="0,0 10,5 0,10" fill="currentColor"/>
+          </marker>
+          <marker id="a-ctl" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <polygon points="0,0 10,5 0,10" fill="var(--control)"/>
+          </marker>
+          <marker id="a-dat" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <polygon points="0,0 10,5 0,10" fill="var(--data)"/>
+          </marker>
+        </defs>
+
+        <rect x="20" y="95" width="170" height="120" rx="8" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="105" y="140" text-anchor="middle" font-size="14" font-weight="600" fill="currentColor">IP 카메라</text>
+        <text x="105" y="163" text-anchor="middle" font-size="11.5" fill="var(--ink-soft)">매장 공유기 안</text>
+        <text x="105" y="182" text-anchor="middle" font-size="11.5" fill="var(--ink-soft)">NVR과 동시 사용</text>
+
+        <rect x="360" y="70" width="190" height="170" rx="8" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="455" y="108" text-anchor="middle" font-size="14" font-weight="600" fill="currentColor">수집 에이전트</text>
+        <text x="455" y="130" text-anchor="middle" font-size="11.5" fill="var(--ink-soft)">매장 PC</text>
+        <line x1="380" y1="148" x2="530" y2="148" stroke="var(--line-strong)" stroke-width="1"/>
+        <text x="455" y="172" text-anchor="middle" font-size="11.5" fill="var(--data)">ffmpeg</text>
+        <text x="455" y="192" text-anchor="middle" font-size="11" fill="var(--ink-soft)">재인코딩 없이</text>
+        <text x="455" y="209" text-anchor="middle" font-size="11" fill="var(--ink-soft)">키프레임 경계 절단</text>
+
+        <rect x="720" y="95" width="160" height="120" rx="8" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="800" y="140" text-anchor="middle" font-size="14" font-weight="600" fill="currentColor">백엔드</text>
+        <text x="800" y="163" text-anchor="middle" font-size="11.5" fill="var(--ink-soft)">→ AI 분석</text>
+        <text x="800" y="182" text-anchor="middle" font-size="11.5" fill="var(--ink-soft)">→ 알림</text>
+
+        <line x1="190" y1="123" x2="352" y2="123" stroke="var(--control)" stroke-width="1.8" marker-end="url(#a-ctl)" marker-start="url(#a-ctl)"/>
+        <text x="271" y="110" text-anchor="middle" font-size="11.5" font-weight="500" fill="var(--control)">ONVIF</text>
+        <text x="271" y="146" text-anchor="middle" font-size="10.5" fill="var(--ink-soft)">어디 있나 · 주소가 뭔가</text>
+
+        <line x1="190" y1="192" x2="352" y2="192" stroke="var(--data)" stroke-width="2.2" marker-end="url(#a-dat)"/>
+        <text x="271" y="179" text-anchor="middle" font-size="11.5" font-weight="500" fill="var(--data)">RTSP / RTP</text>
+        <text x="271" y="215" text-anchor="middle" font-size="10.5" fill="var(--ink-soft)">H.264 영상 · 끊김 없이</text>
+
+        <line x1="550" y1="155" x2="712" y2="155" stroke="var(--data)" stroke-width="2.2" marker-end="url(#a-dat)"/>
+        <text x="631" y="142" text-anchor="middle" font-size="11.5" font-weight="500" fill="var(--data)">HTTPS</text>
+        <text x="631" y="178" text-anchor="middle" font-size="10.5" fill="var(--ink-soft)">5분 mp4 조각</text>
+
+        <text x="105" y="268" text-anchor="middle" font-size="10.5" fill="var(--ink-faint)">카메라는 서버다</text>
+        <text x="455" y="268" text-anchor="middle" font-size="10.5" fill="var(--ink-faint)">에이전트가 당겨온다</text>
+        <text x="800" y="268" text-anchor="middle" font-size="10.5" fill="var(--ink-faint)">에이전트가 밀어넣는다</text>
+        <line x1="20" y1="285" x2="880" y2="285" stroke="var(--line)" stroke-width="1"/>
+        <text x="450" y="306" text-anchor="middle" font-size="10.5" fill="var(--ink-faint)">방향이 카메라 쪽에서 한 번 뒤집힌다 — 이것이 수집 에이전트가 존재하는 이유다</text>
+      </svg>
+      <figcaption>
+        RTSP는 <strong>당겨오는</strong> 프로토콜이다. 카메라가 서버로 앉아 있고 에이전트가 접속해 가져온다.
+        “CCTV가 백엔드로 영상을 보낸다”는 동작은 표준 카메라에 없다.
+      </figcaption>
+    </figure>
+  </section>
+
+  <section>
+    <div class="head"><span class="num">1</span><h2>카메라 찾기 — WS-Discovery</h2></div>
+    <p>
+      에이전트는 카메라의 IP를 모른 채 시작한다. 같은 공유기 안에 “거기 카메라 있나”를 한 번 외치고,
+      대답한 기기의 주소를 받는다. 프린터를 자동으로 찾는 것과 같은 원리다.
+    </p>
+    <figure>
+      <svg viewBox="0 0 880 300" role="img" aria-label="에이전트가 멀티캐스트 주소로 Probe를 뿌리면 카메라와 카메라가 아닌 기기가 모두 유니캐스트로 응답하고, 에이전트는 Types 필드로 카메라만 걸러낸다">
+        <rect x="20" y="115" width="150" height="70" rx="8" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="95" y="147" text-anchor="middle" font-size="13" font-weight="600" fill="currentColor">에이전트</text>
+        <text x="95" y="167" text-anchor="middle" font-size="11" fill="var(--ink-soft)">매장 PC</text>
+
+        <line x1="170" y1="150" x2="322" y2="150" stroke="var(--control)" stroke-width="1.8" marker-end="url(#a-ctl)"/>
+        <text x="246" y="136" text-anchor="middle" font-size="11" font-weight="500" fill="var(--control)">Probe</text>
+        <text x="246" y="171" text-anchor="middle" font-size="10" class="mono" fill="var(--ink-soft)">UDP 3702</text>
+
+        <rect x="330" y="105" width="180" height="90" rx="8" fill="var(--control-soft)" stroke="var(--control)" stroke-width="1.2"/>
+        <text x="420" y="136" text-anchor="middle" font-size="12" font-weight="600" fill="var(--control)">멀티캐스트</text>
+        <text x="420" y="157" text-anchor="middle" font-size="10.5" class="mono" fill="var(--ink-soft)">239.255.255.250</text>
+        <text x="420" y="176" text-anchor="middle" font-size="10.5" fill="var(--ink-soft)">망 전체에 뿌려진다</text>
+
+        <line x1="510" y1="125" x2="662" y2="70" stroke="var(--control)" stroke-width="1.6" marker-end="url(#a-ctl)"/>
+        <line x1="510" y1="150" x2="662" y2="150" stroke="var(--control)" stroke-width="1.6" marker-end="url(#a-ctl)"/>
+        <line x1="510" y1="175" x2="662" y2="235" stroke="var(--line-strong)" stroke-width="1.4" stroke-dasharray="4 3" marker-end="url(#a-ink)"/>
+
+        <rect x="670" y="40" width="190" height="60" rx="8" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="765" y="65" text-anchor="middle" font-size="12" font-weight="600" fill="currentColor">Hikvision 카메라</text>
+        <text x="765" y="84" text-anchor="middle" font-size="10.5" class="mono" fill="var(--control)">NetworkVideoTransmitter</text>
+
+        <rect x="670" y="120" width="190" height="60" rx="8" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="765" y="145" text-anchor="middle" font-size="12" font-weight="600" fill="currentColor">Hanwha 카메라</text>
+        <text x="765" y="164" text-anchor="middle" font-size="10.5" class="mono" fill="var(--control)">NetworkVideoTransmitter</text>
+
+        <rect x="670" y="205" width="190" height="60" rx="8" fill="none" stroke="var(--line-strong)" stroke-width="1.4" stroke-dasharray="4 3"/>
+        <text x="765" y="230" text-anchor="middle" font-size="12" fill="var(--ink-faint)">윈도우 PC · 프린터</text>
+        <text x="765" y="249" text-anchor="middle" font-size="10.5" fill="var(--ink-faint)">Types 불일치 → 버림</text>
+
+        <text x="590" y="290" text-anchor="middle" font-size="10.5" fill="var(--ink-faint)">응답은 멀티캐스트가 아니라 요청자에게 직접(유니캐스트) 돌아온다</text>
+      </svg>
+      <figcaption>
+        WS-Discovery는 ONVIF 전용이 아니다. 같은 주소에 윈도우 PC도 대답하므로,
+        응답의 <code>Types</code>에 <code>NetworkVideoTransmitter</code>가 있는 것만 카메라로 인정한다.
+        이 필터가 없으면 사무실 PC가 카메라 목록에 뜬다 — 실제로 겪은 일이다.
+      </figcaption>
+    </figure>
+    <dl class="facts">
+      <dt>프로토콜</dt><dd>WS-Discovery (SOAP over UDP)</dd>
+      <dt>주소</dt><dd><span class="mono">239.255.255.250:3702</span> 멀티캐스트</dd>
+      <dt>인증</dt><dd>없음 — 비밀번호를 묻기 전 단계라 자격증명 없이 동작해야 한다</dd>
+      <dt>얻는 것</dt><dd>기기 UUID, ONVIF 서비스 주소(XAddr), 제조사·모델</dd>
+    </dl>
+    <p class="note">
+      기기 UUID(<span class="mono">urn:uuid:…</span>)를 카메라 식별자로 쓴다. IP는 DHCP로 바뀌지만 UUID는 그대로다.
+      IP를 식별자로 삼으면 공유기를 재부팅한 다음 날 다른 카메라를 보고 있게 된다.
+    </p>
+  </section>
+
+  <section>
+    <div class="head"><span class="num">2</span><h2>카메라에게 묻기 — ONVIF</h2></div>
+    <p>
+      찾았다고 영상을 받을 수 있는 건 아니다. 어떤 화질이 있는지, 각각의 RTSP 주소가 무엇인지 물어야 한다.
+      ONVIF는 SOAP/XML로 이 대화를 표준화한다. 아래가 실제로 오가는 순서다.
+    </p>
+    <figure>
+      <svg viewBox="0 0 760 430" role="img" aria-label="에이전트가 시각 동기, 서비스 목록, 프로필, 영상 소스를 차례로 물은 뒤 마지막에 RTSP 주소를 받는 ONVIF 호출 순서">
+        <text x="120" y="28" text-anchor="middle" font-size="12.5" font-weight="600" fill="currentColor">에이전트</text>
+        <text x="620" y="28" text-anchor="middle" font-size="12.5" font-weight="600" fill="currentColor">카메라</text>
+        <line x1="120" y1="42" x2="120" y2="400" stroke="var(--line-strong)" stroke-width="1"/>
+        <line x1="620" y1="42" x2="620" y2="400" stroke="var(--line-strong)" stroke-width="1"/>
+
+        <line x1="120" y1="72" x2="612" y2="72" stroke="var(--control)" stroke-width="1.6" marker-end="url(#a-ctl)"/>
+        <text x="370" y="64" text-anchor="middle" font-size="11.5" class="mono" fill="var(--control)">GetSystemDateAndTime</text>
+        <text x="370" y="90" text-anchor="middle" font-size="10.5" fill="var(--ink-soft)">시각이 어긋나면 인증 서명이 깨진다 — 그래서 이것부터</text>
+
+        <line x1="120" y1="128" x2="612" y2="128" stroke="var(--control)" stroke-width="1.6" marker-end="url(#a-ctl)"/>
+        <text x="370" y="120" text-anchor="middle" font-size="11.5" class="mono" fill="var(--control)">GetServices</text>
+        <text x="370" y="146" text-anchor="middle" font-size="10.5" fill="var(--ink-soft)">미디어 서비스 주소를 받는다</text>
+
+        <line x1="120" y1="184" x2="612" y2="184" stroke="var(--control)" stroke-width="1.6" marker-end="url(#a-ctl)"/>
+        <text x="370" y="176" text-anchor="middle" font-size="11.5" class="mono" fill="var(--control)">GetProfiles</text>
+        <line x1="620" y1="212" x2="128" y2="212" stroke="var(--control)" stroke-width="1.6" stroke-dasharray="5 3" marker-end="url(#a-ctl)"/>
+        <text x="370" y="230" text-anchor="middle" font-size="10.5" fill="var(--ink-soft)">main 1920×1080 4Mbps · sub 704×480 512kbps</text>
+
+        <line x1="120" y1="266" x2="612" y2="266" stroke="var(--control)" stroke-width="1.6" marker-end="url(#a-ctl)"/>
+        <text x="370" y="258" text-anchor="middle" font-size="11.5" class="mono" fill="var(--control)">GetVideoSources</text>
+        <text x="370" y="284" text-anchor="middle" font-size="10.5" fill="var(--ink-soft)">프로필이 어느 센서에 붙는지 짝을 맞춘다</text>
+
+        <line x1="120" y1="326" x2="612" y2="326" stroke="var(--data)" stroke-width="2" marker-end="url(#a-dat)"/>
+        <text x="370" y="318" text-anchor="middle" font-size="11.5" class="mono" fill="var(--data)">GetStreamUri(sub)</text>
+        <line x1="620" y1="356" x2="128" y2="356" stroke="var(--data)" stroke-width="2" stroke-dasharray="5 3" marker-end="url(#a-dat)"/>
+        <text x="370" y="378" text-anchor="middle" font-size="11" class="mono" fill="var(--data)">rtsp://192.168.0.64:554/Streaming/Channels/102</text>
+        <text x="370" y="396" text-anchor="middle" font-size="10.5" fill="var(--ink-soft)">여기서부터 ONVIF의 역할은 끝난다</text>
+      </svg>
+      <figcaption>
+        ONVIF는 영상을 한 바이트도 나르지 않는다. “영상은 저기 있다”는 주소 한 줄을 알려주고 물러난다.
+        에이전트가 저장하는 것도 그 주소 하나다.
+      </figcaption>
+    </figure>
+    <dl class="facts">
+      <dt>프로토콜</dt><dd>SOAP/XML over HTTP (ONVIF Profile S / T)</dd>
+      <dt>인증</dt><dd>WS-Security Digest — 카메라와 시각이 맞아야 통과한다</dd>
+      <dt>고르는 것</dt><dd>메인스트림(녹화용) 대신 <strong>서브스트림</strong> — 대역폭 약 1/8, AI 분석에는 충분</dd>
+      <dt>함정</dt><dd>일부 제조사는 관리자 계정과 별개로 ONVIF 전용 계정을 만들어야 한다</dd>
+    </dl>
+  </section>
+
+  <section>
+    <div class="head"><span class="num">3</span><h2>영상 받기 — RTSP와 RTP</h2></div>
+    <p>
+      RTSP는 재생기의 리모컨이고, 영상 자체는 RTP가 나른다. 둘은 다른 프로토콜이지만
+      매장 환경에서는 <strong>같은 TCP 연결 하나</strong>에 섞어 보낸다. 방화벽과 NAT를 뚫는 유일하게 확실한 방법이다.
+    </p>
+    <figure>
+      <svg viewBox="0 0 780 470" role="img" aria-label="RTSP 핸드셰이크 네 단계 뒤에 같은 TCP 연결로 RTP 패킷이 인터리브 프레이밍으로 계속 들어오는 흐름">
+        <text x="120" y="28" text-anchor="middle" font-size="12.5" font-weight="600" fill="currentColor">에이전트 (ffmpeg)</text>
+        <text x="620" y="28" text-anchor="middle" font-size="12.5" font-weight="600" fill="currentColor">카메라</text>
+        <line x1="120" y1="42" x2="120" y2="300" stroke="var(--line-strong)" stroke-width="1"/>
+        <line x1="620" y1="42" x2="620" y2="300" stroke="var(--line-strong)" stroke-width="1"/>
+
+        <line x1="120" y1="68" x2="612" y2="68" stroke="var(--control)" stroke-width="1.6" marker-end="url(#a-ctl)"/>
+        <text x="370" y="60" text-anchor="middle" font-size="11.5" class="mono" fill="var(--control)">DESCRIBE</text>
+        <line x1="620" y1="92" x2="128" y2="92" stroke="var(--control)" stroke-width="1.6" stroke-dasharray="5 3" marker-end="url(#a-ctl)"/>
+        <text x="370" y="110" text-anchor="middle" font-size="10.5" fill="var(--ink-soft)">SDP — 코덱 H.264, 해상도, 파라미터셋</text>
+
+        <line x1="120" y1="146" x2="612" y2="146" stroke="var(--control)" stroke-width="1.6" marker-end="url(#a-ctl)"/>
+        <text x="370" y="138" text-anchor="middle" font-size="11.5" class="mono" fill="var(--control)">SETUP</text>
+        <text x="370" y="166" text-anchor="middle" font-size="10.5" class="mono" fill="var(--ink-soft)">Transport: RTP/AVP/TCP;interleaved=0-1</text>
+        <text x="370" y="184" text-anchor="middle" font-size="10.5" fill="var(--ink-soft)">“UDP 말고 이 연결에 같이 실어달라”</text>
+
+        <line x1="120" y1="222" x2="612" y2="222" stroke="var(--control)" stroke-width="1.6" marker-end="url(#a-ctl)"/>
+        <text x="370" y="214" text-anchor="middle" font-size="11.5" class="mono" fill="var(--control)">PLAY</text>
+
+        <line x1="620" y1="262" x2="128" y2="262" stroke="var(--data)" stroke-width="2.4" marker-end="url(#a-dat)"/>
+        <line x1="620" y1="278" x2="128" y2="278" stroke="var(--data)" stroke-width="2.4" marker-end="url(#a-dat)"/>
+        <text x="370" y="252" text-anchor="middle" font-size="11.5" font-weight="500" fill="var(--data)">RTP 패킷 — 끊김 없이 계속</text>
+
+        <line x1="40" y1="320" x2="740" y2="320" stroke="var(--line)" stroke-width="1"/>
+        <text x="40" y="348" font-size="11.5" font-weight="600" fill="currentColor">같은 TCP 연결에 섞어 보내는 방법 (인터리브 프레이밍)</text>
+
+        <rect x="40" y="366" width="70" height="46" rx="4" fill="var(--data-soft)" stroke="var(--data)" stroke-width="1.2"/>
+        <text x="75" y="388" text-anchor="middle" font-size="13" class="mono" fill="var(--data)">$</text>
+        <text x="75" y="404" text-anchor="middle" font-size="9.5" fill="var(--ink-soft)">1바이트</text>
+
+        <rect x="118" y="366" width="90" height="46" rx="4" fill="var(--data-soft)" stroke="var(--data)" stroke-width="1.2"/>
+        <text x="163" y="386" text-anchor="middle" font-size="11" class="mono" fill="var(--data)">채널</text>
+        <text x="163" y="404" text-anchor="middle" font-size="9.5" fill="var(--ink-soft)">0=영상 1=제어</text>
+
+        <rect x="216" y="366" width="100" height="46" rx="4" fill="var(--data-soft)" stroke="var(--data)" stroke-width="1.2"/>
+        <text x="266" y="386" text-anchor="middle" font-size="11" class="mono" fill="var(--data)">길이</text>
+        <text x="266" y="404" text-anchor="middle" font-size="9.5" fill="var(--ink-soft)">2바이트</text>
+
+        <rect x="324" y="366" width="416" height="46" rx="4" fill="none" stroke="currentColor" stroke-width="1.4"/>
+        <text x="532" y="386" text-anchor="middle" font-size="11" class="mono" fill="currentColor">RTP 패킷 (H.264 조각 · RFC 6184)</text>
+        <text x="532" y="404" text-anchor="middle" font-size="9.5" fill="var(--ink-soft)">타임스탬프와 일련번호가 붙어 있다</text>
+
+        <text x="40" y="440" font-size="10.5" fill="var(--ink-faint)">RTSP 요청과 이 데이터 프레임이 같은 소켓에 번갈아 흐른다. 포트를 하나만 열면 되므로 매장 공유기를 손댈 필요가 없다.</text>
+        <text x="40" y="458" font-size="10.5" fill="var(--ink-faint)">UDP 방식은 포트를 따로 열어야 하고 NAT 뒤에서 자주 끊긴다 — 그래서 에이전트는 항상 TCP를 강제한다.</text>
+      </svg>
+      <figcaption>
+        <code>-rtsp_transport tcp</code>는 성능 타협이 아니라 <strong>현장에서 되는 유일한 설정</strong>이다.
+        매장 공유기 뒤에서 UDP 전송은 예고 없이 끊긴다.
+      </figcaption>
+    </figure>
+    <dl class="facts">
+      <dt>제어</dt><dd>RTSP (RFC 2326 / 7826) · TCP 554</dd>
+      <dt>운반</dt><dd>RTP — TCP 인터리브로 같은 연결에 실린다</dd>
+      <dt>페이로드</dt><dd>H.264 → RFC 6184 · H.265 → RFC 7798</dd>
+      <dt>인증</dt><dd>Digest — ONVIF와 별개로 다시 인증한다. 비밀번호의 <code>@</code> <code>/</code> <code>:</code>는 URL 인코딩 필수</dd>
+    </dl>
+  </section>
+
+  <section>
+    <div class="head"><span class="num">4</span><h2>조각내기 — 프로토콜이 아니라 우리 몫</h2></div>
+    <p>
+      카메라는 연속 스트림만 낸다. 5분씩 자르는 것은 표준에 없고 받는 쪽이 해야 한다.
+      그리고 아무 데서나 자를 수 없다 — H.264는 앞 프레임을 참조하기 때문이다.
+    </p>
+    <figure>
+      <svg viewBox="0 0 880 250" role="img" aria-label="키프레임 사이의 P프레임은 앞을 참조하므로 절단은 반드시 다음 키프레임에서 이루어진다">
+        <text x="20" y="34" font-size="11.5" font-weight="600" fill="currentColor">들어오는 프레임</text>
+
+        <rect x="20" y="52" width="26" height="40" rx="3" fill="var(--data-soft)" stroke="var(--data)" stroke-width="1.4"/>
+        <text x="33" y="78" text-anchor="middle" font-size="12" font-weight="600" fill="var(--data)">I</text>
+        <rect x="52" y="52" width="20" height="40" rx="3" fill="none" stroke="var(--line-strong)" stroke-width="1.2"/>
+        <text x="62" y="78" text-anchor="middle" font-size="11" fill="var(--ink-faint)">P</text>
+        <rect x="78" y="52" width="20" height="40" rx="3" fill="none" stroke="var(--line-strong)" stroke-width="1.2"/>
+        <text x="88" y="78" text-anchor="middle" font-size="11" fill="var(--ink-faint)">P</text>
+        <rect x="104" y="52" width="20" height="40" rx="3" fill="none" stroke="var(--line-strong)" stroke-width="1.2"/>
+        <text x="114" y="78" text-anchor="middle" font-size="11" fill="var(--ink-faint)">P</text>
+
+        <rect x="136" y="52" width="26" height="40" rx="3" fill="var(--data-soft)" stroke="var(--data)" stroke-width="1.4"/>
+        <text x="149" y="78" text-anchor="middle" font-size="12" font-weight="600" fill="var(--data)">I</text>
+        <rect x="168" y="52" width="20" height="40" rx="3" fill="none" stroke="var(--line-strong)" stroke-width="1.2"/>
+        <text x="178" y="78" text-anchor="middle" font-size="11" fill="var(--ink-faint)">P</text>
+        <rect x="194" y="52" width="20" height="40" rx="3" fill="none" stroke="var(--line-strong)" stroke-width="1.2"/>
+        <text x="204" y="78" text-anchor="middle" font-size="11" fill="var(--ink-faint)">P</text>
+
+        <text x="230" y="78" font-size="13" fill="var(--ink-faint)">···</text>
+
+        <rect x="256" y="52" width="20" height="40" rx="3" fill="none" stroke="var(--line-strong)" stroke-width="1.2"/>
+        <text x="266" y="78" text-anchor="middle" font-size="11" fill="var(--ink-faint)">P</text>
+        <rect x="282" y="52" width="20" height="40" rx="3" fill="none" stroke="var(--line-strong)" stroke-width="1.2"/>
+        <text x="292" y="78" text-anchor="middle" font-size="11" fill="var(--ink-faint)">P</text>
+        <rect x="308" y="52" width="26" height="40" rx="3" fill="var(--data-soft)" stroke="var(--data)" stroke-width="2"/>
+        <text x="321" y="78" text-anchor="middle" font-size="12" font-weight="600" fill="var(--data)">I</text>
+        <rect x="340" y="52" width="20" height="40" rx="3" fill="none" stroke="var(--line-strong)" stroke-width="1.2"/>
+        <text x="350" y="78" text-anchor="middle" font-size="11" fill="var(--ink-faint)">P</text>
+
+        <line x1="290" y1="42" x2="290" y2="112" stroke="currentColor" stroke-width="1.4" stroke-dasharray="4 3"/>
+        <text x="290" y="34" text-anchor="middle" font-size="10.5" fill="var(--ink-soft)">300초 지남</text>
+        <line x1="321" y1="100" x2="321" y2="122" stroke="var(--data)" stroke-width="2"/>
+        <text x="360" y="120" font-size="10.5" fill="var(--data)">← 여기서 자른다</text>
+
+        <text x="20" y="160" font-size="11" fill="var(--ink-soft)">
+          <tspan font-weight="600" fill="var(--data)">I</tspan> 키프레임 — 혼자서 그림이 된다  ·
+          <tspan font-weight="600" fill="var(--ink-faint)">P</tspan> 앞 프레임과의 차이만 담는다
+        </text>
+        <text x="20" y="182" font-size="11" fill="var(--ink-soft)">P프레임에서 자르면 앞부분이 없어 그 조각만으로는 디코딩되지 않는다 — AI 서버가 열지 못하는 파일이 된다.</text>
+
+        <line x1="20" y1="202" x2="860" y2="202" stroke="var(--line)" stroke-width="1"/>
+        <text x="20" y="226" font-size="11" fill="var(--ink-soft)">
+          그래서 실제 조각은 설정값보다 조금 길다. 5분 설정에 300~302초가 나오며, 메타의
+          <tspan class="mono" fill="var(--data)">durationMs</tspan>가 진짜 길이다.
+        </text>
+        <text x="20" y="244" font-size="11" fill="var(--ink-soft)">재인코딩은 하지 않는다(<tspan class="mono">-c:v copy</tspan>). CPU를 거의 쓰지 않고 화질 손실도 없다.</text>
+      </svg>
+      <figcaption>
+        ffmpeg의 <code>-f segment</code> 머서가 이 규칙을 알아서 지킨다. 우리가 하는 일은
+        “다 쓴 조각”과 “쓰고 있는 조각”을 물리적으로 분리해 미완성 파일을 올리지 않게 막는 것이다.
+      </figcaption>
+    </figure>
+  </section>
+
+  <section>
+    <div class="head"><span class="num">5</span><h2>백엔드로 — HTTPS</h2></div>
+    <p>
+      여기서 방향이 뒤집힌다. 카메라에게서는 당겨왔지만, 백엔드로는 에이전트가 밀어넣는다.
+      표준 프로토콜은 없고 우리가 정한 계약을 쓴다.
+    </p>
+    <figure>
+      <svg viewBox="0 0 880 260" role="img" aria-label="조각 하나가 메타데이터와 영상 두 파트로 나뉘어 멱등키와 함께 전송되고, 응답 코드에 따라 삭제·재시도·중단으로 갈린다">
+        <rect x="20" y="60" width="230" height="130" rx="8" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="135" y="86" text-anchor="middle" font-size="12" font-weight="600" fill="currentColor" class="mono">POST /v1/segments</text>
+        <line x1="40" y1="100" x2="230" y2="100" stroke="var(--line)" stroke-width="1"/>
+        <text x="40" y="122" font-size="10.5" class="mono" fill="var(--control)">Idempotency-Key</text>
+        <text x="40" y="138" font-size="10" fill="var(--ink-soft)">segmentId (ULID)</text>
+        <rect x="40" y="148" width="88" height="30" rx="4" fill="var(--control-soft)" stroke="var(--control)" stroke-width="1"/>
+        <text x="84" y="167" text-anchor="middle" font-size="10.5" class="mono" fill="var(--control)">meta</text>
+        <rect x="136" y="148" width="94" height="30" rx="4" fill="var(--data-soft)" stroke="var(--data)" stroke-width="1"/>
+        <text x="183" y="167" text-anchor="middle" font-size="10.5" class="mono" fill="var(--data)">video mp4</text>
+
+        <line x1="250" y1="125" x2="382" y2="125" stroke="var(--data)" stroke-width="2.2" marker-end="url(#a-dat)"/>
+        <text x="316" y="115" text-anchor="middle" font-size="10.5" fill="var(--ink-soft)">HTTPS</text>
+
+        <rect x="390" y="85" width="140" height="80" rx="8" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <text x="460" y="120" text-anchor="middle" font-size="12.5" font-weight="600" fill="currentColor">백엔드</text>
+        <text x="460" y="141" text-anchor="middle" font-size="10.5" fill="var(--ink-soft)">저장 후 응답</text>
+
+        <line x1="530" y1="100" x2="672" y2="55" stroke="var(--data)" stroke-width="1.6" marker-end="url(#a-dat)"/>
+        <line x1="530" y1="125" x2="672" y2="125" stroke="var(--control)" stroke-width="1.6" marker-end="url(#a-ctl)"/>
+        <line x1="530" y1="150" x2="672" y2="195" stroke="currentColor" stroke-width="1.6" marker-end="url(#a-ink)"/>
+
+        <text x="680" y="45" font-size="11.5" class="mono" fill="var(--data)">201 · 409</text>
+        <text x="680" y="63" font-size="10.5" fill="var(--ink-soft)">성공 — 조각 삭제</text>
+
+        <text x="680" y="115" font-size="11.5" class="mono" fill="var(--control)">5xx · 408 · 429 · 끊김</text>
+        <text x="680" y="133" font-size="10.5" fill="var(--ink-soft)">보관 후 재시도</text>
+
+        <text x="680" y="185" font-size="11.5" class="mono" fill="currentColor">401 · 413</text>
+        <text x="680" y="203" font-size="10.5" fill="var(--ink-soft)">중단 — 사람을 부른다</text>
+
+        <line x1="20" y1="228" x2="860" y2="228" stroke="var(--line)" stroke-width="1"/>
+        <text x="20" y="250" font-size="10.5" fill="var(--ink-faint)">409를 성공으로 취급하는 이유: 업로드는 됐는데 응답만 못 받는 경우가 반드시 생긴다. 안 그러면 같은 5분이 두 번 분석돼 알림이 중복 발송된다.</text>
+      </svg>
+      <figcaption>
+        되는 재시도와 안 되는 재시도를 가른다. 회선 장애는 기다리면 풀리지만 토큰이 틀린 것은
+        백만 번 시도해도 풀리지 않는다 — 후자는 즉시 멈추고 화면에 띄운다.
+      </figcaption>
+    </figure>
+  </section>
+
+  <section>
+    <div class="head"><h2>가짜 카메라가 진짜와 구분되지 않는 이유</h2></div>
+    <p>
+      개발에는 실물 CCTV가 없으므로 노트북 웹캠이나 테스트 영상을 카메라인 척 내보낸다.
+      중요한 것은 <strong>어디까지가 흉내이고 어디부터가 진짜인가</strong>이다.
+    </p>
+    <figure>
+      <svg viewBox="0 0 880 250" role="img" aria-label="RTSP 주소를 경계로 왼쪽은 교체 가능한 영상 출처이고 오른쪽 수집 경로는 진짜 카메라에서도 그대로 쓰인다">
+        <rect x="20" y="40" width="330" height="150" rx="8" fill="none" stroke="var(--line-strong)" stroke-width="1.4" stroke-dasharray="5 4"/>
+        <text x="185" y="66" text-anchor="middle" font-size="11.5" font-weight="600" fill="var(--ink-faint)">교체되는 부분</text>
+
+        <rect x="42" y="82" width="130" height="42" rx="6" fill="none" stroke="currentColor" stroke-width="1.3"/>
+        <text x="107" y="108" text-anchor="middle" font-size="11.5" fill="currentColor">노트북 웹캠</text>
+        <rect x="42" y="132" width="130" height="42" rx="6" fill="none" stroke="currentColor" stroke-width="1.3"/>
+        <text x="107" y="158" text-anchor="middle" font-size="11.5" fill="currentColor">테스트 영상</text>
+        <rect x="196" y="107" width="132" height="42" rx="6" fill="var(--control-soft)" stroke="var(--control)" stroke-width="1.3"/>
+        <text x="262" y="126" text-anchor="middle" font-size="11.5" fill="var(--control)">가짜 카메라</text>
+        <text x="262" y="142" text-anchor="middle" font-size="9.5" fill="var(--ink-soft)">ONVIF + RTSP 응답</text>
+
+        <line x1="172" y1="103" x2="190" y2="118" stroke="currentColor" stroke-width="1.3" marker-end="url(#a-ink)"/>
+        <line x1="172" y1="153" x2="190" y2="138" stroke="currentColor" stroke-width="1.3" marker-end="url(#a-ink)"/>
+
+        <line x1="380" y1="40" x2="380" y2="200" stroke="var(--data)" stroke-width="2"/>
+        <text x="380" y="222" text-anchor="middle" font-size="11" font-weight="600" fill="var(--data)">RTSP 주소 한 줄</text>
+        <text x="380" y="240" text-anchor="middle" font-size="10" fill="var(--ink-soft)">여기가 경계다</text>
+
+        <rect x="410" y="40" width="450" height="150" rx="8" fill="none" stroke="var(--data)" stroke-width="1.6"/>
+        <text x="635" y="66" text-anchor="middle" font-size="11.5" font-weight="600" fill="var(--data)">진짜 CCTV로 바꿔도 그대로 쓰이는 부분</text>
+
+        <rect x="430" y="86" width="96" height="80" rx="6" fill="none" stroke="currentColor" stroke-width="1.3"/>
+        <text x="478" y="120" text-anchor="middle" font-size="11" fill="currentColor">RTSP</text>
+        <text x="478" y="138" text-anchor="middle" font-size="11" fill="currentColor">수집</text>
+
+        <rect x="546" y="86" width="96" height="80" rx="6" fill="none" stroke="currentColor" stroke-width="1.3"/>
+        <text x="594" y="120" text-anchor="middle" font-size="11" fill="currentColor">조각</text>
+        <text x="594" y="138" text-anchor="middle" font-size="11" fill="currentColor">생성</text>
+
+        <rect x="662" y="86" width="96" height="80" rx="6" fill="none" stroke="currentColor" stroke-width="1.3"/>
+        <text x="710" y="120" text-anchor="middle" font-size="11" fill="currentColor">보관 ·</text>
+        <text x="710" y="138" text-anchor="middle" font-size="11" fill="currentColor">복구</text>
+
+        <rect x="778" y="86" width="64" height="80" rx="6" fill="none" stroke="currentColor" stroke-width="1.3"/>
+        <text x="810" y="120" text-anchor="middle" font-size="11" fill="currentColor">업로</text>
+        <text x="810" y="138" text-anchor="middle" font-size="11" fill="currentColor">드</text>
+
+        <line x1="526" y1="126" x2="540" y2="126" stroke="var(--data)" stroke-width="1.6" marker-end="url(#a-dat)"/>
+        <line x1="642" y1="126" x2="656" y2="126" stroke="var(--data)" stroke-width="1.6" marker-end="url(#a-dat)"/>
+        <line x1="758" y1="126" x2="772" y2="126" stroke="var(--data)" stroke-width="1.6" marker-end="url(#a-dat)"/>
+      </svg>
+      <figcaption>
+        에이전트는 웹캠을 직접 읽지 않는다. 웹캠 테스트조차 가짜 카메라를 거쳐 RTSP로 받는다.
+        지름길을 하나라도 뚫으면 “진짜 카메라로 바꾸면 그대로 된다”는 보증이 그 순간 깨진다.
+      </figcaption>
+    </figure>
+  </section>
+
+  <section>
+    <div class="head"><h2>한눈에</h2></div>
+    <div class="wrap">
+      <table>
+        <thead>
+          <tr><th>단계</th><th>프로토콜</th><th>주소·포트</th><th>무엇을 얻나</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>카메라 찾기</td>
+            <td>WS-Discovery<br><span class="mono" style="font-size:0.82em;color:var(--ink-faint)">SOAP over UDP</span></td>
+            <td class="mono">239.255.255.250:3702</td>
+            <td>기기 UUID, ONVIF 주소</td>
+          </tr>
+          <tr>
+            <td>카메라에게 묻기</td>
+            <td>ONVIF<br><span class="mono" style="font-size:0.82em;color:var(--ink-faint)">SOAP over HTTP</span></td>
+            <td class="mono">http://카메라/onvif/…</td>
+            <td>화질 목록과 RTSP 주소</td>
+          </tr>
+          <tr>
+            <td>영상 받기</td>
+            <td>RTSP + RTP<br><span class="mono" style="font-size:0.82em;color:var(--ink-faint)">TCP 인터리브</span></td>
+            <td class="mono">rtsp://카메라:554/…</td>
+            <td>H.264 스트림</td>
+          </tr>
+          <tr>
+            <td>조각내기</td>
+            <td><span style="color:var(--ink-faint)">표준 없음 — 에이전트가 한다</span></td>
+            <td class="mono">—</td>
+            <td>키프레임 경계 mp4</td>
+          </tr>
+          <tr>
+            <td>백엔드로</td>
+            <td>HTTPS<br><span class="mono" style="font-size:0.82em;color:var(--ink-faint)">multipart/form-data</span></td>
+            <td class="mono">POST /v1/segments</td>
+            <td>—</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <footer>
+    수집 에이전트 v1.0.0 · 이 문서의 마크다운판과 백엔드 요청 명세는 저장소의
+    <span class="mono">docs/protocol-flow.md</span>, 설계 근거는
+    <span class="mono">docs/superpowers/specs/</span>에 있다.
+  </footer>
+
+</div>

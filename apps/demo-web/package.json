@@ -1,0 +1,19 @@
+{
+  "name": "@scene-stealer/demo-web",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "node scripts/build-all.mjs",
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "qrcode-generator": "^1.4.4"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.2",
+    "vite": "^5.4.11"
+  }
+}
